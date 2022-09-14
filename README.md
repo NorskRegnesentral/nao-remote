@@ -27,6 +27,3 @@ use different libraries. A future task may be to make sure that both
 use Python 2 and Python 3 use the same library.
 
 
-## Making things run automatically on NAO
-
-You can add entries in /home/nao/naoqi/preferences/autoload.ini
