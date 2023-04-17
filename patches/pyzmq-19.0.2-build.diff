@@ -1,0 +1,32 @@
+--- buildutils/detect.py.orig	2023-04-14 11:57:27.787219000 +0200
++++ buildutils/detect.py	2023-04-14 11:59:04.897500000 +0200
+@@ -122,18 +122,18 @@
+     efile = test_compilation(cfile, compiler=cc, **compiler_attrs)
+     patch_lib_paths(efile, cc.library_dirs)
+ 
+-    rc, so, se = get_output_error([efile])
+-    if rc:
+-        msg = "Error running version detection script:\n%s\n%s" % (so,se)
+-        logging.error(msg)
+-        raise IOError(msg)
++    # rc, so, se = get_output_error([efile])
++    # if rc:
++    #     msg = "Error running version detection script:\n%s\n%s" % (so,se)
++    #     logging.error(msg)
++    #     raise IOError(msg)
+ 
+-    handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
++    # handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
+ 
+-    props = {}
+-    for line in (x for x in so.split('\n') if x):
+-        key, val = line.split(':')
+-        props[key] = handlers[key](val)
++    # props = {}
++    # for line in (x for x in so.split('\n') if x):
++    #     key, val = line.split(':')
++    #     props[key] = handlers[key](val)
+ 
+-    return props
++    return {"vers": (4, 3, 4)}
+ 
