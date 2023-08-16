@@ -3,6 +3,10 @@
  <names>
   <name lang="en_US">NR Nao Remote</name>
  </names>
+ <descriptions>
+  <description lang="en_US">This is the NAO remote used for the ROSA project.</description>
+  <description lang="nn_NO">Denne er NAO fjernkontrol som er brukt i ROSA prosjektet</description>
+ </descriptions>
  <supportedLanguages>
   <language>en_US</language>
  </supportedLanguages>
@@ -73,7 +77,6 @@
  </contents>
  <requirements>
   <naoqiRequirement minVersion="2.1.4.13"/>
-  <robotRequirement/>
   <robotRequirement model="NAO"/>
  </requirements>
  <services>
