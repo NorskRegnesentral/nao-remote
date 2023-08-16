@@ -32,6 +32,7 @@ ${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' \
 			     -f '- app/raise_hand' \
 			     -f '- app/remote.pml' \
 			     -f '- app/small_cheer' \
+                             -f '- app/exciting_fun' \
 			     -f '- .mypy_cache' \
 			     -f '- app/t*' \
 			     -f '- app/icon.png' \
