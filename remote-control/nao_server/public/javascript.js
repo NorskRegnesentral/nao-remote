@@ -18,56 +18,9 @@ window.onload = function () { // a function that is done as soon as the page loa
     });
 };
 
-
-function onBtnPlaySound(){
-    socket.send("check_connection");
-};
-
-
-function onBtnGreet() { // function that greets you
-    socket.send("greet");
+function sendButtonMessage(value) {
+    socket.send(value);
 }
-
-function onBtnBye() { // function that decides tells you to try again
-    socket.send("goodbye");
-}
-
-function onBtnNextTask() { // function that decides the next task
-    socket.send("next_task");
-}
-
-function onBtnTryAgain() { // function for a big celebration
-    socket.send("try_again");
-}
-
-function onBtnSmallCheer() { // function that tells you to try again
-    socket.send("small_cheer");
-}
-
-function onRobotDance() { // function for a big celebration
-    socket.send("dance_robot");
-}
-
-function onChickenDance() { // function for a big celebration
-    socket.send("dance_chicken");
-}
-
-function onDiscoDance() { // function for a big celebration
-    socket.send("dance_disco");
-}
-
-function onMarcarena() { // function for a big celebration
-    socket.send("dance_marcarena");
-}
-
-function onThinking() {
-    socket.send("thinking");
-}
-
-function onInteresting() {
-    socket.send("exciting_fun");
-}
-
 
 /*
 function getVolume() { // function to get the volume from the robot
@@ -95,27 +48,13 @@ function clearMuteButton() {
 
 function onBtnLMinus() { // function to lower the volume
     clearMuteButton();
-    socket.send("minus");
+    sendButtonMessage("minus");
     
 }
 
 function onBtnLPlus() { // function to increase the volume
     clearMuteButton();
-    socket.send("plus");
-}
-
-// function for making the robot wake up
-function onBtnWakeUp(){
-    socket.send("wake_up");
-}
-
-// function for making the robot rest
-function onBtnRest(){
-    socket.send("rest");
-}
-
-function onBtnRaiseHand() {
-    socket.send("raise_hand");
+    sendButtonMessage("plus");
 }
 
 // function to submit the text written by the user and that the robot has to say
@@ -123,11 +62,7 @@ function onBtnRaiseHand() {
 function onBtnSend(){
     const behavior = "tts ";
     var to_speak = document.getElementById("speechText").value;
-    socket.send(behavior.concat(to_speak));
-}
-
-function onBtnShutdown(){
-    socket.send("shutdown");
+    sendButtonMessage(behavior.concat(to_speak));
 }
 
 function textEntered(event) {

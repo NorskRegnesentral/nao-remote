@@ -42,25 +42,25 @@
       <section>
         <h2>Holdning</h2>
         <div class="div-flex">
-          <button id="btnStand" onclick="onBtnWakeUp()" class="postureBtn">Stå opp</button>
-	  <button id="btnRaiseHand" onclick="onBtnRaiseHand()" class="postureBtn">Rekk opp/ned hånd</button>
-          <button id="btnRest" onclick="onBtnRest()" class="postureBtn">Slapp av</button>
+          <button id="btnStand" value="wake_up" onclick="sendButtonMessage(this.value)" class="postureBtn">Stå opp</button>
+	  <button id="btnRaiseHand" value="raise_hand" onclick="sendButtonMessage(this.value)" class="postureBtn">Rekk opp/ned hånd</button>
+          <button id="btnRest" value="rest" onclick="sendButtonMessage(this.value)" class="postureBtn">Slapp av</button>
         </div>
       </section>
 
       <section>
 	<h2>Start</h2>
         <div id="startStopBtns" class="div-flex">
-          <button id="btnGreeting" onclick="onBtnGreet()" class="greetBtn">Hilse</button>
-          <button id="btnStop" onclick="onBtnBye()" class="greetBtn">Avslutte</button>
+          <button id="btnGreeting" value="greet" onclick="sendButtonMessage(this.value)" class="greetBtn">Hilse</button>
+          <button id="btnStop" value="goodbye" onclick="sendButtonMessage(this.value)" class="greetBtn">Avslutte</button>
         </div>
       </section>
 
       <section>
 	<h2>Snakk</h2>
         <div class="div-flex">
-	  <button id="btnThinking" onclick="onThinking()" class="taskBtn">Tenker…</button><br>
-	  <button id="btnInteresting" onclick="onInteresting()" class="taskBtn">Interessant!</button><br>
+	  <button id="btnThinking" value="thinking" onclick="sendButtonMessage(this.value)" class="taskBtn">Tenker…</button><br>
+	  <button id="btnInteresting" value="exciting_fun" onclick="sendButtonMessage(this.value)" class="taskBtn">Interessant!</button><br>
 	</div>
         <div class="div-flex">
 	  <label for="speechText">Hva vil du at roboten skal si?</label><br>
@@ -74,9 +74,9 @@
         <!-- Buttons for controlling the task you are working with - control whether you jump to the
              next task or if you try again on the current task. -->
         <div class="div-flex" id="taskBtnsTop">
-          <button id="btnNextTask" onclick="onBtnNextTask()" class="taskBtn">Neste oppgave</button>
-          <button id="btnTryAgain" onclick="onBtnTryAgain()" class="taskBtn">Prøv igjen</button>
-          <button id="btnSmallCheer" onclick="onBtnSmallCheer()" class="taskBtn">Riktig!</button>
+          <button id="btnNextTask" value="next_task" onclick="sendButtonMessage(this.value)" class="taskBtn">Neste oppgave</button>
+          <button id="btnTryAgain" value="try_again" onclick="sendButtonMessage(this.value)" class="taskBtn">Prøv igjen</button>
+          <button id="btnSmallCheer" value="small_cheer" onclick="sendButtonMessage(this.value)" class="taskBtn">Riktig!</button>
         </div>
       </section>
 
@@ -84,10 +84,10 @@
       <section>
 	<h2>Danser</h2>
         <div id="taskBtnsBottom" class="div-flex">
-          <button id="btnRobotDance" onclick="onRobotDance()" class="taskBtn">Robot</button>
-	  <button id="btnChickenDance" onclick="onChickenDance()" class="taskBtn">Kylling</button>
-          <button id="btnDiscoDance" onclick="onDiscoDance()" class="taskBtn">Disco</button>
-          <button id="btnMarcarena" onclick="onMarcarena()" class="taskBtn">Marcarena</button>
+          <button id="btnRobotDance" value="dance_robot" onclick="sendButtonMessage(this.value)" class="taskBtn">Robot</button>
+	  <button id="btnChickenDance" value="dance_chicken" onclick="sendButtonMessage(this.value)" class="taskBtn">Kylling</button>
+          <button id="btnDiscoDance" value="dance_disco" onclick="sendButtonMessage(this.value)" class="taskBtn">Disco</button>
+          <button id="btnMarcarena" value="dance_marcarena" onclick="sendButtonMessage(this.value)" class="taskBtn">Marcarena</button>
         </div>
       </section>
 
@@ -120,8 +120,8 @@
       <section>
 	<h2>Misc</h2>
 	<div class="div-flex">
-          <button id="btnCheck" onclick="onBtnPlaySound()" class="checkBtn">Sjekk tilkobling</button>
-          <button id="btnShutdown" onclick="onBtnShutdown()" class="shutdownBtn">Shutdown</button>
+          <button id="btnCheck" value="check_connection" onclick="sendButtonMessage(this.value)" class="checkBtn">Sjekk tilkobling</button>
+          <button id="btnShutdown" value="shutdown" onclick="sendButtonMessage(this.value)" class="shutdownBtn">Shutdown</button>
 	</div>
       </section>
     </section>
