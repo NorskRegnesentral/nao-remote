@@ -1,0 +1,1507 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ChoregrapheProject xmlns="http://www.ald.softbankrobotics.com/schema/choregraphe/project.xsd" xar_version="3">
+  <Box name="root" id="-1" localization="8" tooltip="Root box of Choregraphe&apos;s behavior. Highest level possible." x="0" y="0">
+    <bitmap>media/images/box/root.png</bitmap>
+    <script language="4">
+      <content>
+        <![CDATA[]]>
+      </content>
+    </script>
+    <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+    <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+    <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+    <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+    <Timeline enable="0">
+      <BehaviorLayer name="behavior_layer1">
+        <BehaviorKeyframe name="keyframe1" index="1">
+          <Diagram>
+            <Box name="Stand Up" id="4" localization="8" tooltip="the robot tries to stand up from any position for a number of tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." x="1045" y="178">
+              <bitmap>media/images/box/movement/stand.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated when the robot succeed in standing up." id="4" />
+              <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when the robot failed to stand up after n tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." id="5" />
+              <Parameter name="Maximum of tries" inherits_from_parent="0" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of stand up before stimulating the failure output." id="6" />
+              <Timeline enable="0">
+                <BehaviorLayer name="StandUpBehavior">
+                  <BehaviorKeyframe name="DetectRobotPose" index="1">
+                    <Diagram>
+                      <Box name="Goto Posture" id="2" localization="8" tooltip="The robot goes from its current postition to the asked posture." x="331" y="92">
+                        <bitmap>media/images/box/box-diagram.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.nTries = 0
+        self.postureService = self.session().service("ALRobotPosture")
+        pass
+
+    def onUnload(self):
+        self.postureService.stopMove()
+
+    def onInput_onStart(self):
+        if(self.nTries != self.getParameter("Maximum of tries")):
+            self.nTries = self.getParameter("Maximum of tries")
+            self.postureService.setMaxTryNumber(self.nTries)
+
+        result = self.postureService.goToPosture(self.getParameter("Name"), self.getParameter("Speed (%)")/100.)
+        if(result):
+            self.success()
+        else:
+            self.failure()
+        pass
+
+    def onInput_onStop(self):
+        self.onUnload() #~ it is recommanded to call onUnload of this box in a onStop method, as the code written in onUnload is used to stop the box as well
+        pass]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                        <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture has been reached." id="4" />
+                        <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture could not be reached." id="5" />
+                        <Parameter name="Name" inherits_from_parent="0" content_type="3" value="Stand" default_value="Stand" custom_choice="1" tooltip="Name of the posture to go to." id="6">
+                          <Choice value="Crouch" />
+                          <Choice value="LyingBack" />
+                          <Choice value="LyingBelly" />
+                          <Choice value="Sit" />
+                          <Choice value="SitRelax" />
+                          <Choice value="StandInit" />
+                          <Choice value="Stand" />
+                          <Choice value="StandZero" />
+                        </Parameter>
+                        <Parameter name="Speed (%)" inherits_from_parent="0" content_type="1" value="80" default_value="80" min="0" max="100" tooltip="Speed to go to the posture." id="7" />
+                        <Parameter name="Maximum of tries" inherits_from_parent="1" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of go to posture before stimulating the failure output." id="8" />
+                        <Resource name="All motors" type="Lock" timeout="0" />
+                        <Resource name="Stiffness" type="Lock" timeout="0" />
+                      </Box>
+                      <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+                      <Link inputowner="0" indexofinput="5" outputowner="2" indexofoutput="5" />
+                    </Diagram>
+                  </BehaviorKeyframe>
+                </BehaviorLayer>
+              </Timeline>
+              <Resource name="All motors" type="Lock" timeout="0" />
+            </Box>
+            <Box name="Robot dance" id="7" localization="8" tooltip="This box is empty and should be used to create any box diagram you would like.&#x0A;&#x0A;To edit its diagram, double-click on it." x="762" y="158">
+              <bitmap>media/images/box/box-diagram.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+              <Timeline enable="0">
+                <BehaviorLayer name="behavior_layer1">
+                  <BehaviorKeyframe name="keyframe1" index="1">
+                    <Diagram>
+                      <Box name="Robot dance" id="1" localization="8" tooltip="This box is empty (contains a single motion layer with no motor position&#x0A;defined in it) and should be used to create any animation you would like." x="442" y="102">
+                        <bitmap>media/images/box/movement/move.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                        <Timeline enable="1" fps="25" start_frame="1" end_frame="-1" size="640">
+                          <BehaviorLayer name="behavior_layer1">
+                            <BehaviorKeyframe name="keyframe1" index="1">
+                              <Diagram />
+                            </BehaviorKeyframe>
+                          </BehaviorLayer>
+                          <ActuatorList model="">
+                            <ActuatorCurve name="value" actuator="HeadPitch" mute="0" unit="0">
+                              <Key frame="25" value="-9.98359" />
+                              <Key frame="50" value="-12.6746" />
+                              <Key frame="90" value="-26.3" />
+                              <Key frame="110" value="-6.91691" />
+                              <Key frame="130" value="4.14509" />
+                              <Key frame="150" value="11.7" />
+                              <Key frame="170" value="-12.6746" />
+                              <Key frame="210" value="-26.3" />
+                              <Key frame="230" value="-6.91691" />
+                              <Key frame="250" value="4.14509" />
+                              <Key frame="270" value="10.5" />
+                              <Key frame="305" value="-5.9" />
+                              <Key frame="335" value="-5.9" />
+                              <Key frame="515" value="-9.73129" />
+                              <Key frame="540" value="10" />
+                              <Key frame="565" value="-18.5" />
+                              <Key frame="615" value="6.86521" />
+                              <Key frame="640" value="-8.7" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="HeadYaw" mute="0" unit="0">
+                              <Key frame="25" value="0.0812852" />
+                              <Key frame="50" value="0.474406" />
+                              <Key frame="90" value="0.474406" />
+                              <Key frame="110" value="0.474406" />
+                              <Key frame="130" value="0.474406" />
+                              <Key frame="170" value="0.474406" />
+                              <Key frame="210" value="0.474406" />
+                              <Key frame="230" value="0.474406" />
+                              <Key frame="250" value="0.474406" />
+                              <Key frame="515" value="0.4964" />
+                              <Key frame="540" value="-21.9" />
+                              <Key frame="565" value="-26.1" />
+                              <Key frame="590" value="34.1" />
+                              <Key frame="615" value="32.7008" />
+                              <Key frame="640" value="0.4964" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LAnklePitch" mute="0" unit="0">
+                              <Key frame="25" value="4.96654" />
+                              <Key frame="50" value="4.96654" />
+                              <Key frame="90" value="4.96654" />
+                              <Key frame="110" value="4.96654" />
+                              <Key frame="130" value="4.96654" />
+                              <Key frame="170" value="4.96654" />
+                              <Key frame="210" value="4.96654" />
+                              <Key frame="230" value="4.96654" />
+                              <Key frame="250" value="4.96654" />
+                              <Key frame="515" value="4.96654" />
+                              <Key frame="615" value="4.96654" />
+                              <Key frame="640" value="4.96654" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LAnkleRoll" mute="0" unit="0">
+                              <Key frame="25" value="-5.82861" />
+                              <Key frame="50" value="-5.82861" />
+                              <Key frame="90" value="-5.82861" />
+                              <Key frame="110" value="-5.82861" />
+                              <Key frame="130" value="-5.82861" />
+                              <Key frame="170" value="-5.82861" />
+                              <Key frame="210" value="-5.82861" />
+                              <Key frame="230" value="-5.82861" />
+                              <Key frame="250" value="-5.82861" />
+                              <Key frame="515" value="-5.82861" />
+                              <Key frame="615" value="-5.82861" />
+                              <Key frame="640" value="-5.82861" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LElbowRoll" mute="0" unit="0">
+                              <Key frame="25" value="-24.3766" />
+                              <Key frame="50" value="-38.5723" />
+                              <Key frame="90" value="-74.5936" />
+                              <Key frame="110" value="-74.2022" />
+                              <Key frame="130" value="-67.1" />
+                              <Key frame="150" value="-73.5832" />
+                              <Key frame="170" value="-38.5723" />
+                              <Key frame="210" value="-74.5936" />
+                              <Key frame="230" value="-74.2022" />
+                              <Key frame="250" value="-73.6355" />
+                              <Key frame="270" value="-73.5832" />
+                              <Key frame="290" value="-86.9" />
+                              <Key frame="305" value="-16.3" />
+                              <Key frame="320" value="-86.9" />
+                              <Key frame="335" value="-16.3" />
+                              <Key frame="349" value="-73.3445" />
+                              <Key frame="375" value="-73.126" />
+                              <Key frame="410" value="-73.3445" />
+                              <Key frame="445" value="-73.126" />
+                              <Key frame="480" value="-73.3445" />
+                              <Key frame="515" value="-24.4263" />
+                              <Key frame="540" value="-82.4" />
+                              <Key frame="565" value="-82.4" />
+                              <Key frame="590" value="-82.4" />
+                              <Key frame="615" value="-82.4391" />
+                              <Key frame="640" value="-24.3532" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LElbowYaw" mute="0" unit="0">
+                              <Key frame="25" value="-68.9412" />
+                              <Key frame="50" value="-68.4539" />
+                              <Key frame="90" value="-68.0813" />
+                              <Key frame="110" value="-49.261" />
+                              <Key frame="130" value="-32.6639" />
+                              <Key frame="150" value="-20.5" />
+                              <Key frame="170" value="-68.4539" />
+                              <Key frame="210" value="-68.0813" />
+                              <Key frame="230" value="-49.261" />
+                              <Key frame="250" value="-32.6639" />
+                              <Key frame="270" value="-20.5" />
+                              <Key frame="305" value="-20.5263" />
+                              <Key frame="335" value="-20.5263" />
+                              <Key frame="349" value="-20.729" />
+                              <Key frame="375" value="-20.8306" />
+                              <Key frame="410" value="-20.729" />
+                              <Key frame="445" value="-20.8306" />
+                              <Key frame="480" value="-20.729" />
+                              <Key frame="515" value="-68.6701" />
+                              <Key frame="615" value="-71.2505" />
+                              <Key frame="640" value="-68.6814" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LHand" mute="0" unit="1">
+                              <Key frame="25" value="0.293013" />
+                              <Key frame="50" value="0.293013" />
+                              <Key frame="90" value="0.291937" />
+                              <Key frame="110" value="0.293013" />
+                              <Key frame="130" value="0.293013" />
+                              <Key frame="150" value="0.293013" />
+                              <Key frame="170" value="0.293013" />
+                              <Key frame="210" value="0.291937" />
+                              <Key frame="230" value="0.293013" />
+                              <Key frame="250" value="0.293013" />
+                              <Key frame="270" value="0.293013" />
+                              <Key frame="305" value="0.293013" />
+                              <Key frame="335" value="0.293013" />
+                              <Key frame="349" value="0.293013" />
+                              <Key frame="375" value="0.293013" />
+                              <Key frame="410" value="0.293013" />
+                              <Key frame="445" value="0.293013" />
+                              <Key frame="480" value="0.293013" />
+                              <Key frame="515" value="0.293013" />
+                              <Key frame="615" value="0.293013" />
+                              <Key frame="640" value="0.293013" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LHipPitch" mute="0" unit="0">
+                              <Key frame="25" value="7.30033" />
+                              <Key frame="50" value="7.3" />
+                              <Key frame="90" value="7.3" />
+                              <Key frame="110" value="7.3" />
+                              <Key frame="130" value="7.3" />
+                              <Key frame="170" value="7.3" />
+                              <Key frame="210" value="7.3" />
+                              <Key frame="230" value="7.3" />
+                              <Key frame="250" value="7.3" />
+                              <Key frame="515" value="7.30057" />
+                              <Key frame="540" value="7.3" />
+                              <Key frame="565" value="7.3" />
+                              <Key frame="590" value="7.3" />
+                              <Key frame="615" value="7.30021" />
+                              <Key frame="640" value="7.3" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LHipRoll" mute="0" unit="0">
+                              <Key frame="25" value="6.59786" />
+                              <Key frame="50" value="6.59786" />
+                              <Key frame="90" value="6.59786" />
+                              <Key frame="110" value="6.59786" />
+                              <Key frame="130" value="6.59786" />
+                              <Key frame="170" value="6.59786" />
+                              <Key frame="210" value="6.59786" />
+                              <Key frame="230" value="6.59786" />
+                              <Key frame="250" value="6.59786" />
+                              <Key frame="515" value="6.59786" />
+                              <Key frame="615" value="6.59786" />
+                              <Key frame="640" value="6.59786" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LHipYawPitch" mute="0" unit="0">
+                              <Key frame="25" value="-9.74084" />
+                              <Key frame="50" value="-9.74084" />
+                              <Key frame="90" value="-9.74084" />
+                              <Key frame="110" value="-9.74084" />
+                              <Key frame="130" value="-9.74084" />
+                              <Key frame="170" value="-9.74084" />
+                              <Key frame="210" value="-9.74084" />
+                              <Key frame="230" value="-9.74084" />
+                              <Key frame="250" value="-9.74084" />
+                              <Key frame="515" value="-9.74084" />
+                              <Key frame="615" value="-9.74084" />
+                              <Key frame="640" value="-9.74084" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LKneePitch" mute="0" unit="0">
+                              <Key frame="25" value="-4.99935" />
+                              <Key frame="50" value="-4.99935" />
+                              <Key frame="90" value="-4.99935" />
+                              <Key frame="110" value="-4.99935" />
+                              <Key frame="130" value="-4.99935" />
+                              <Key frame="170" value="-4.99935" />
+                              <Key frame="210" value="-4.99935" />
+                              <Key frame="230" value="-4.99935" />
+                              <Key frame="250" value="-4.99935" />
+                              <Key frame="515" value="-4.99935" />
+                              <Key frame="615" value="-4.99935" />
+                              <Key frame="640" value="-4.99935" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LShoulderPitch" mute="0" unit="0">
+                              <Key frame="25" value="82.4444" />
+                              <Key frame="50" value="75.2" />
+                              <Key frame="70" value="24.9" />
+                              <Key frame="90" value="-18.5" />
+                              <Key frame="110" value="17.4" />
+                              <Key frame="130" value="66.8547" />
+                              <Key frame="150" value="100.4" />
+                              <Key frame="170" value="75.2" />
+                              <Key frame="190" value="24.9" />
+                              <Key frame="210" value="-18.5" />
+                              <Key frame="230" value="24.9" />
+                              <Key frame="250" value="66.8547" />
+                              <Key frame="270" value="100.4" />
+                              <Key frame="305" value="95.3851" />
+                              <Key frame="335" value="95.3851" />
+                              <Key frame="349" value="95.3232" />
+                              <Key frame="375" value="-77.3276" />
+                              <Key frame="410" value="94.6" />
+                              <Key frame="445" value="-77.3276" />
+                              <Key frame="480" value="94.6" />
+                              <Key frame="515" value="82.5842" />
+                              <Key frame="540" value="47.9" />
+                              <Key frame="565" value="105.2" />
+                              <Key frame="590" value="47.9" />
+                              <Key frame="615" value="102.527" />
+                              <Key frame="640" value="82.3711" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LShoulderRoll" mute="0" unit="0">
+                              <Key frame="25" value="12.6818" />
+                              <Key frame="50" value="35.1" />
+                              <Key frame="70" value="47.5" />
+                              <Key frame="90" value="67.5" />
+                              <Key frame="110" value="64.2" />
+                              <Key frame="130" value="64.5" />
+                              <Key frame="150" value="70.9613" />
+                              <Key frame="170" value="35.1" />
+                              <Key frame="190" value="47.5" />
+                              <Key frame="210" value="67.5" />
+                              <Key frame="230" value="47.5" />
+                              <Key frame="250" value="70.4642" />
+                              <Key frame="270" value="70.9613" />
+                              <Key frame="305" value="70.4272" />
+                              <Key frame="335" value="70.4272" />
+                              <Key frame="349" value="70.6666" />
+                              <Key frame="375" value="70.4104" />
+                              <Key frame="410" value="70.6666" />
+                              <Key frame="445" value="70.4104" />
+                              <Key frame="480" value="70.6666" />
+                              <Key frame="515" value="13.2253" />
+                              <Key frame="615" value="12.8339" />
+                              <Key frame="640" value="12.7585" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="LWristYaw" mute="0" unit="0">
+                              <Key frame="25" value="5.74109" />
+                              <Key frame="50" value="5.74109" />
+                              <Key frame="90" value="5.92196" />
+                              <Key frame="110" value="5.74109" />
+                              <Key frame="130" value="5.74109" />
+                              <Key frame="150" value="5.74109" />
+                              <Key frame="170" value="5.74109" />
+                              <Key frame="210" value="5.92196" />
+                              <Key frame="230" value="5.74109" />
+                              <Key frame="250" value="5.74109" />
+                              <Key frame="270" value="5.74109" />
+                              <Key frame="305" value="5.74109" />
+                              <Key frame="335" value="5.74109" />
+                              <Key frame="349" value="5.74109" />
+                              <Key frame="375" value="5.74109" />
+                              <Key frame="410" value="5.74109" />
+                              <Key frame="445" value="5.74109" />
+                              <Key frame="480" value="5.74109" />
+                              <Key frame="515" value="5.74109" />
+                              <Key frame="615" value="5.74109" />
+                              <Key frame="640" value="5.74109" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RAnklePitch" mute="0" unit="0">
+                              <Key frame="25" value="4.96654" />
+                              <Key frame="50" value="4.96654" />
+                              <Key frame="90" value="4.96654" />
+                              <Key frame="110" value="4.96654" />
+                              <Key frame="130" value="4.96654" />
+                              <Key frame="170" value="4.96654" />
+                              <Key frame="210" value="4.96654" />
+                              <Key frame="230" value="4.96654" />
+                              <Key frame="250" value="4.96654" />
+                              <Key frame="515" value="4.96654" />
+                              <Key frame="615" value="4.96654" />
+                              <Key frame="640" value="4.96654" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RAnkleRoll" mute="0" unit="0">
+                              <Key frame="25" value="5.82838" />
+                              <Key frame="50" value="5.82838" />
+                              <Key frame="90" value="5.82838" />
+                              <Key frame="110" value="5.82838" />
+                              <Key frame="130" value="5.82838" />
+                              <Key frame="170" value="5.82838" />
+                              <Key frame="210" value="5.82838" />
+                              <Key frame="230" value="5.82838" />
+                              <Key frame="250" value="5.82838" />
+                              <Key frame="515" value="5.82838" />
+                              <Key frame="615" value="5.82838" />
+                              <Key frame="640" value="5.82838" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RElbowRoll" mute="0" unit="0">
+                              <Key frame="25" value="24.3766" />
+                              <Key frame="50" value="38.5723" />
+                              <Key frame="90" value="74.5936" />
+                              <Key frame="110" value="74.2022" />
+                              <Key frame="130" value="67.1" />
+                              <Key frame="150" value="73.5832" />
+                              <Key frame="170" value="38.5723" />
+                              <Key frame="210" value="74.5936" />
+                              <Key frame="230" value="74.2022" />
+                              <Key frame="250" value="73.6355" />
+                              <Key frame="270" value="73.5832" />
+                              <Key frame="290" value="16.2" />
+                              <Key frame="305" value="87.1" />
+                              <Key frame="320" value="16.2" />
+                              <Key frame="335" value="87.1" />
+                              <Key frame="349" value="70.4872" />
+                              <Key frame="375" value="70.2991" />
+                              <Key frame="410" value="70.4872" />
+                              <Key frame="445" value="70.2991" />
+                              <Key frame="480" value="70.4872" />
+                              <Key frame="515" value="24.3664" />
+                              <Key frame="540" value="80" />
+                              <Key frame="565" value="80" />
+                              <Key frame="590" value="80" />
+                              <Key frame="615" value="79.8204" />
+                              <Key frame="640" value="23.9277" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RElbowYaw" mute="0" unit="0">
+                              <Key frame="25" value="68.9412" />
+                              <Key frame="50" value="68.4539" />
+                              <Key frame="90" value="68.0813" />
+                              <Key frame="110" value="49.261" />
+                              <Key frame="130" value="32.6639" />
+                              <Key frame="150" value="20.5" />
+                              <Key frame="170" value="68.4539" />
+                              <Key frame="210" value="68.0813" />
+                              <Key frame="230" value="49.261" />
+                              <Key frame="250" value="32.6639" />
+                              <Key frame="270" value="20.5" />
+                              <Key frame="305" value="20.5263" />
+                              <Key frame="335" value="20.5263" />
+                              <Key frame="349" value="26.2333" />
+                              <Key frame="375" value="25.6842" />
+                              <Key frame="410" value="26.2333" />
+                              <Key frame="445" value="25.6842" />
+                              <Key frame="480" value="26.2333" />
+                              <Key frame="515" value="68.5744" />
+                              <Key frame="540" value="70.4" />
+                              <Key frame="565" value="70.4" />
+                              <Key frame="590" value="70.4" />
+                              <Key frame="615" value="70.4967" />
+                              <Key frame="640" value="69.2934" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RHand" mute="0" unit="1">
+                              <Key frame="25" value="0.293013" />
+                              <Key frame="50" value="0.293013" />
+                              <Key frame="90" value="0.291937" />
+                              <Key frame="110" value="0.293013" />
+                              <Key frame="130" value="0.293013" />
+                              <Key frame="150" value="0.293013" />
+                              <Key frame="170" value="0.293013" />
+                              <Key frame="210" value="0.291937" />
+                              <Key frame="230" value="0.293013" />
+                              <Key frame="250" value="0.293013" />
+                              <Key frame="270" value="0.293013" />
+                              <Key frame="305" value="0.293013" />
+                              <Key frame="335" value="0.293013" />
+                              <Key frame="349" value="0.293013" />
+                              <Key frame="375" value="0.293013" />
+                              <Key frame="410" value="0.293013" />
+                              <Key frame="445" value="0.293013" />
+                              <Key frame="480" value="0.293013" />
+                              <Key frame="515" value="0.293013" />
+                              <Key frame="615" value="0.293013" />
+                              <Key frame="640" value="0.293013" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RHipPitch" mute="0" unit="0">
+                              <Key frame="25" value="7.3001" />
+                              <Key frame="50" value="7.3" />
+                              <Key frame="90" value="7.3" />
+                              <Key frame="110" value="7.3" />
+                              <Key frame="130" value="7.3" />
+                              <Key frame="170" value="7.3" />
+                              <Key frame="210" value="7.3" />
+                              <Key frame="230" value="7.3" />
+                              <Key frame="250" value="7.3" />
+                              <Key frame="515" value="7.30058" />
+                              <Key frame="540" value="7.3" />
+                              <Key frame="565" value="7.3" />
+                              <Key frame="590" value="7.3" />
+                              <Key frame="615" value="7.30022" />
+                              <Key frame="640" value="7.3" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RHipRoll" mute="0" unit="0">
+                              <Key frame="25" value="-6.59786" />
+                              <Key frame="50" value="-6.59786" />
+                              <Key frame="90" value="-6.59786" />
+                              <Key frame="110" value="-6.59786" />
+                              <Key frame="130" value="-6.59786" />
+                              <Key frame="170" value="-6.59786" />
+                              <Key frame="210" value="-6.59786" />
+                              <Key frame="230" value="-6.59786" />
+                              <Key frame="250" value="-6.59786" />
+                              <Key frame="515" value="-6.59786" />
+                              <Key frame="615" value="-6.59786" />
+                              <Key frame="640" value="-6.59786" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RHipYawPitch" mute="0" unit="0">
+                              <Key frame="25" value="-9.74084" />
+                              <Key frame="50" value="-9.74084" />
+                              <Key frame="90" value="-9.74084" />
+                              <Key frame="110" value="-9.74084" />
+                              <Key frame="130" value="-9.74084" />
+                              <Key frame="170" value="-9.74084" />
+                              <Key frame="210" value="-9.74084" />
+                              <Key frame="230" value="-9.74084" />
+                              <Key frame="250" value="-9.74084" />
+                              <Key frame="515" value="-9.74084" />
+                              <Key frame="615" value="-9.74084" />
+                              <Key frame="640" value="-9.74084" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RKneePitch" mute="0" unit="0">
+                              <Key frame="25" value="-4.99935" />
+                              <Key frame="50" value="-4.99935" />
+                              <Key frame="90" value="-4.99935" />
+                              <Key frame="110" value="-4.99935" />
+                              <Key frame="130" value="-4.99935" />
+                              <Key frame="170" value="-4.99935" />
+                              <Key frame="210" value="-4.99935" />
+                              <Key frame="230" value="-4.99935" />
+                              <Key frame="250" value="-4.99935" />
+                              <Key frame="515" value="-4.99935" />
+                              <Key frame="615" value="-4.99935" />
+                              <Key frame="640" value="-4.99935" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RShoulderPitch" mute="0" unit="0">
+                              <Key frame="25" value="82.4445" />
+                              <Key frame="50" value="75.2" />
+                              <Key frame="70" value="24.9" />
+                              <Key frame="90" value="-18.5" />
+                              <Key frame="110" value="17.4" />
+                              <Key frame="130" value="66.8547" />
+                              <Key frame="150" value="100.4" />
+                              <Key frame="170" value="75.2" />
+                              <Key frame="190" value="24.9" />
+                              <Key frame="210" value="-18.5" />
+                              <Key frame="230" value="24.9" />
+                              <Key frame="250" value="66.8547" />
+                              <Key frame="270" value="100.4" />
+                              <Key frame="305" value="95.3851" />
+                              <Key frame="335" value="95.3851" />
+                              <Key frame="349" value="95.3232" />
+                              <Key frame="375" value="95.2253" />
+                              <Key frame="410" value="-71.1" />
+                              <Key frame="445" value="95.2253" />
+                              <Key frame="480" value="-71.1" />
+                              <Key frame="515" value="82.2609" />
+                              <Key frame="540" value="112.1" />
+                              <Key frame="565" value="46.8" />
+                              <Key frame="590" value="112.1" />
+                              <Key frame="615" value="41.0483" />
+                              <Key frame="640" value="83.0004" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RShoulderRoll" mute="0" unit="0">
+                              <Key frame="25" value="-12.6818" />
+                              <Key frame="50" value="-35.1" />
+                              <Key frame="70" value="-47.5" />
+                              <Key frame="90" value="-67.5" />
+                              <Key frame="110" value="-64.2" />
+                              <Key frame="130" value="-64.5" />
+                              <Key frame="150" value="-70.9613" />
+                              <Key frame="170" value="-35.1" />
+                              <Key frame="190" value="-47.5" />
+                              <Key frame="210" value="-67.5" />
+                              <Key frame="230" value="-47.5" />
+                              <Key frame="250" value="-70.4642" />
+                              <Key frame="270" value="-70.9613" />
+                              <Key frame="305" value="-70.4272" />
+                              <Key frame="335" value="-70.4272" />
+                              <Key frame="349" value="-70.6666" />
+                              <Key frame="375" value="-70.1184" />
+                              <Key frame="410" value="-71.5" />
+                              <Key frame="445" value="-70.1184" />
+                              <Key frame="480" value="-71.5" />
+                              <Key frame="515" value="-13.2253" />
+                              <Key frame="615" value="-13.8365" />
+                              <Key frame="640" value="-13.0239" />
+                            </ActuatorCurve>
+                            <ActuatorCurve name="value" actuator="RWristYaw" mute="0" unit="0">
+                              <Key frame="25" value="5.49969" />
+                              <Key frame="50" value="1.86209" />
+                              <Key frame="90" value="-5.67259" />
+                              <Key frame="110" value="-1.82403" />
+                              <Key frame="130" value="2.36758" />
+                              <Key frame="150" value="5.49547" />
+                              <Key frame="170" value="1.86209" />
+                              <Key frame="210" value="-5.67259" />
+                              <Key frame="230" value="-1.82403" />
+                              <Key frame="250" value="2.36758" />
+                              <Key frame="270" value="5.49547" />
+                              <Key frame="305" value="5.49547" />
+                              <Key frame="335" value="5.49547" />
+                              <Key frame="349" value="5.49547" />
+                              <Key frame="375" value="5.49547" />
+                              <Key frame="410" value="5.49547" />
+                              <Key frame="445" value="5.49547" />
+                              <Key frame="480" value="5.49547" />
+                              <Key frame="515" value="5.49547" />
+                              <Key frame="615" value="5.49547" />
+                              <Key frame="640" value="5.49547" />
+                            </ActuatorCurve>
+                          </ActuatorList>
+                        </Timeline>
+                      </Box>
+                      <Box name="Wait " id="2" localization="8" tooltip="Wait a moment before sending a signal on the output. &#x0A;Can be stopped anytime. &#x0A;Stimulating the input again before output is activated restarts the waiting period.&#x0A;" x="264" y="65">
+                        <bitmap>media/images/box/wait.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.waiting = None
+
+    def onUnload(self):
+        self.cancelWaiting()
+
+    def triggerOutput(self):
+        self.timerOutput()
+
+    def cancelWaiting(self):
+        if self.waiting:
+            self.waiting.cancel()
+        self.waiting = None
+
+    def onInput_onStart(self):
+        self.cancelWaiting()
+        import qi
+        self.waiting = qi.async(self.triggerOutput, delay=int(self.getParameter("Timeout (s)") * 1000 * 1000))
+
+    def onInput_onStop(self):
+        if self.getParameter("Trigger timerOutput if cancelled") and self.waiting and self.waiting.isRunning():
+            self.timerOutput()
+        self.onUnload()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Start the Wait box with the configured timeout value." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stop the wait and stimulate the output." id="3" />
+                        <Output name="timerOutput" type="1" type_size="1" nature="1" inner="0" tooltip="Send a bang once time set in parameters is elapsed, or if the box is stopped and the appropriate parameter is set." id="4" />
+                        <Parameter name="Timeout (s)" inherits_from_parent="0" content_type="2" value="2" default_value="1" min="0" max="5000" tooltip="Duration the box waits before stimulating the output." id="5" />
+                        <Parameter name="Trigger timerOutput if cancelled" inherits_from_parent="0" content_type="0" value="0" default_value="1" tooltip="If the box is currently waiting and cancelled, output will be stimulated." id="6" />
+                      </Box>
+                      <Box name="Light show" id="8" localization="8" tooltip="This box is empty and should be used to create any box diagram you would like.&#x0A;&#x0A;To edit its diagram, double-click on it." x="411" y="514">
+                        <bitmap>media/images/box/box-diagram.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                        <Timeline enable="0">
+                          <BehaviorLayer name="behavior_layer1">
+                            <BehaviorKeyframe name="keyframe1" index="1">
+                              <Diagram>
+                                <Box name="Disco eyes" id="7" localization="8" tooltip="This box contains a basic python script and can be used to create any python script box you would like.&#x0A;&#x0A;To edit its script, double-click on it." x="426" y="74">
+                                  <bitmap>media/images/box/box-python-script.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+
+    def onUnload(self):
+        #puts code for box cleanup here
+        #~ for fadeOp in self.fadeOps:
+            #~ fadeOp.cancel()
+        pass
+
+    def onInput_onStart(self):
+        """Fade the eye Led you have chosen to the color you have chosen with the duration you have chosen!"""
+
+        colors = [[216,0,0], [256,222,7], [249,43,146], [36, 247, 247], [222,69,247], [85,130,235], [255, 128, 0], [9,219,65],
+                  [204,0,0], [0,102,51], [255,204,204], [102,102,255]]
+
+        angles = [0, 45, 90, 135, 180, 225, 270, 315]
+
+        for i in range(8):
+            for angle, color in zip(angles, colors):
+                self.set_color_LED("Left", angle, color)
+                self.set_color_LED("Right", angle, color)
+
+            colors.append(colors.pop(0))
+
+        self.leds.fadeRGB("FaceLeds", 256*256*255 + 256*255 + 255, 10.0, _async=True)
+
+        self.onStopped()
+
+
+    # Function for setting the colors for each led
+    # Side will be either left or right
+    def set_color_LED(self, side, angle, color):
+
+        led = self.processAngle(angle)
+
+        if side == "Left":
+            n_led = led[0]
+        else:
+            n_led = led[1]
+
+        name = "FaceLed"+side+str(n_led)
+        duration = 0.2
+
+        fadeOp = self.leds.fadeRGB(name, 256*256*color[0] + 256*color[1] + color[2], duration)
+
+
+
+    def processAngle(self, angle_deg):
+        return [(45 - int(angle_deg)) % 360 / 45] * 2]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                  <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                                  <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                                </Box>
+                                <Box name="Twinkle brain" id="5" localization="8" tooltip="The selected LEDs flash on and off during the time defined in parameters." x="464" y="444">
+                                  <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                  <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                                  <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                                  <Parameter name="LEDs group" inherits_from_parent="0" content_type="3" value="BrainLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="5">
+                                    <Choice value="AllLeds" />
+                                    <Choice value="BrainLeds" />
+                                    <Choice value="EarLeds" />
+                                    <Choice value="FaceLeds" />
+                                    <Choice value="FeetLeds" />
+                                    <Choice value="LeftEarLeds" />
+                                    <Choice value="LeftFaceLeds" />
+                                    <Choice value="LeftFootLeds" />
+                                    <Choice value="RightEarLeds" />
+                                    <Choice value="RightFaceLeds" />
+                                    <Choice value="RightFootLeds" />
+                                  </Parameter>
+                                  <Parameter name="Time to flash on (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                  <Parameter name="Time to flash off (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="7" />
+                                  <Parameter name="Animation duration (s)" inherits_from_parent="0" content_type="2" value="25" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="8" />
+                                  <Timeline enable="0">
+                                    <BehaviorLayer name="behavior_layer1">
+                                      <BehaviorKeyframe name="keyframe1" index="1">
+                                        <Diagram>
+                                          <Box name="Set LEDs" id="3" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="176" y="119">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash on (s)"))
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                            <Parameter name="Time to flash on (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                          </Box>
+                                          <Box name="Set LEDs" id="1" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="180" y="262">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash off (s)"))
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                            <Parameter name="Time to flash off (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                          </Box>
+                                          <Box name="Set LEDs" id="4" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="308" y="12">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., 0.1)
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                          </Box>
+                                          <Box name="Wait" id="6" localization="8" tooltip="Wait a moment before sending a signal on the output. &#x0A;Can be stopped anytime. &#x0A;Stimulating the input again before output is activated restarts the waiting period.&#x0A;" x="165" y="14">
+                                            <bitmap>media/images/box/wait.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.waiting = None
+
+    def onUnload(self):
+        self.cancelWaiting()
+
+    def triggerOutput(self):
+        self.timerOutput()
+
+    def cancelWaiting(self):
+        if self.waiting:
+            self.waiting.cancel()
+        self.waiting = None
+
+    def onInput_onStart(self):
+        self.cancelWaiting()
+        import qi
+        self.waiting = qi.async(self.triggerOutput, delay=int(self.getParameter("Animation duration (s)") * 1000 * 1000))
+
+    def onInput_onStop(self):
+        if self.waiting and self.waiting.isRunning():
+            self.timerOutput()
+        self.onUnload()]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Start the Wait box with the configured timeout value." id="2" />
+                                            <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stop the wait and stimulate the output." id="3" />
+                                            <Output name="timerOutput" type="1" type_size="1" nature="1" inner="0" tooltip="Send a bang once time set in parameters is elapsed, or if the box is stopped." id="4" />
+                                            <Parameter name="Animation duration (s)" inherits_from_parent="1" content_type="2" value="10" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="5" />
+                                          </Box>
+                                          <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                          <Link inputowner="1" indexofinput="2" outputowner="3" indexofoutput="3" />
+                                          <Link inputowner="3" indexofinput="2" outputowner="1" indexofoutput="3" />
+                                          <Link inputowner="0" indexofinput="4" outputowner="4" indexofoutput="3" />
+                                          <Link inputowner="6" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                          <Link inputowner="4" indexofinput="2" outputowner="6" indexofoutput="4" />
+                                        </Diagram>
+                                      </BehaviorKeyframe>
+                                    </BehaviorLayer>
+                                  </Timeline>
+                                </Box>
+                                <Box name="Feet disco" id="10" localization="8" tooltip="This box contains a basic python script and can be used to create any python script box you would like.&#x0A;&#x0A;To edit its script, double-click on it." x="536" y="706">
+                                  <bitmap>media/images/box/box-python-script.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+
+    def onUnload(self):
+        #puts code for box cleanup here
+        #~ for fadeOp in self.fadeOps:
+            #~ fadeOp.cancel()
+        pass
+
+    def onInput_onStart(self):
+        """Fade the eye Led you have chosen to the color you have chosen with the duration you have chosen!"""
+
+        colors = [[216,0,0], [256,222,7], [249,43,146], [36, 247, 247], [222,69,247], [85,130,235], [255, 128, 0], [9,219,65],
+                  [255,153,204], [0,0,105], [204,0,0], [0,102,51], [255,204,204], [102,102,255]]
+
+
+
+
+
+        for color in colors:
+            self.set_color_LED("Left", color)
+            self.set_color_LED("Right", color)
+
+        self.leds.fadeRGB("RightFootLeds", 0, 10.0)
+        self.leds.fadeRGB("LeftFootLeds", 0, 10.0)
+        self.onStopped()
+
+    # Function for setting the colors for each led
+    # Side will be either left or right
+    def set_color_LED(self, side, color):
+
+
+        name = side+"FootLeds"
+
+        duration = 1.0
+
+        fadeOp = self.leds.fadeRGB(name, 256*256*color[0] + 256*color[1] + color[2], duration)]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                  <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                                  <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                                </Box>
+                                <Box name="Ear LEDs" id="6" localization="8" tooltip="Set the intensity of all the LEDs of one of or both ears." x="751" y="219">
+                                  <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.fadeOps = []
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onStart(self):
+        if( self.getParameter("Side") == "Left" ):
+            sGroup = "LeftEarLeds"
+        elif( self.getParameter("Side") == "Right" ):
+            sGroup = "RightEarLeds"
+        else:
+            sGroup = "EarLeds"
+        fadeOp = self.leds.fade(sGroup, self.getParameter("Intensity (%)")/100., self.getParameter("Duration (s)"), _async=True)
+        self.fadeOps.append(fadeOp)
+        fadeOp.wait()
+        self.fadeOps.remove(fadeOp)
+        if( self.fadeOps == [] ):
+            self.onDone() # activate output of the box]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                  <Output name="onDone" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="3" />
+                                  <Parameter name="Side" inherits_from_parent="0" content_type="3" value="Both" default_value="Both" custom_choice="0" tooltip="Choose the ear where the LED light is set." id="4">
+                                    <Choice value="Both" />
+                                    <Choice value="Left" />
+                                    <Choice value="Right" />
+                                  </Parameter>
+                                  <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="LEDs intensity, from 0 (off) to 100 (max)." id="5" />
+                                  <Parameter name="Duration (s)" inherits_from_parent="0" content_type="2" value="0.1" default_value="0.1" min="0" max="5" tooltip="Transition&apos;s duration in seconds." id="6" />
+                                </Box>
+                                <Box name="Set LEDs" id="1" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="667" y="402">
+                                  <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Duration (s)"))
+        self.onReady() # activate output of the box]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                  <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                  <Parameter name="LEDs group" inherits_from_parent="0" content_type="3" value="BrainLeds" default_value="EarLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                    <Choice value="AllLeds" />
+                                    <Choice value="BrainLeds" />
+                                    <Choice value="EarLeds" />
+                                    <Choice value="FaceLeds" />
+                                    <Choice value="FeetLeds" />
+                                    <Choice value="LeftEarLeds" />
+                                    <Choice value="LeftFaceLeds" />
+                                    <Choice value="LeftFootLeds" />
+                                    <Choice value="RightEarLeds" />
+                                    <Choice value="RightFaceLeds" />
+                                    <Choice value="RightFootLeds" />
+                                  </Parameter>
+                                  <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                  <Parameter name="Duration (s)" inherits_from_parent="0" content_type="2" value="10" default_value="1" min="0" max="60" tooltip="How much time to go to the max/min intensity in seconds." id="6" />
+                                </Box>
+                                <Box name="Twinkle ears" id="2" localization="8" tooltip="The selected LEDs flash on and off during the time defined in parameters." x="474" y="243">
+                                  <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                  <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                                  <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+                                  <Parameter name="LEDs group" inherits_from_parent="0" content_type="3" value="EarLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="5">
+                                    <Choice value="AllLeds" />
+                                    <Choice value="BrainLeds" />
+                                    <Choice value="EarLeds" />
+                                    <Choice value="FaceLeds" />
+                                    <Choice value="FeetLeds" />
+                                    <Choice value="LeftEarLeds" />
+                                    <Choice value="LeftFaceLeds" />
+                                    <Choice value="LeftFootLeds" />
+                                    <Choice value="RightEarLeds" />
+                                    <Choice value="RightFaceLeds" />
+                                    <Choice value="RightFootLeds" />
+                                  </Parameter>
+                                  <Parameter name="Time to flash on (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                  <Parameter name="Time to flash off (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="7" />
+                                  <Parameter name="Animation duration (s)" inherits_from_parent="0" content_type="2" value="25" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="8" />
+                                  <Timeline enable="0">
+                                    <BehaviorLayer name="behavior_layer1">
+                                      <BehaviorKeyframe name="keyframe1" index="1">
+                                        <Diagram>
+                                          <Box name="Set LEDs" id="3" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="176" y="119">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash on (s)"))
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                            <Parameter name="Time to flash on (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                          </Box>
+                                          <Box name="Set LEDs" id="1" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="180" y="262">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash off (s)"))
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                            <Parameter name="Time to flash off (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                                          </Box>
+                                          <Box name="Set LEDs" id="4" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="308" y="12">
+                                            <bitmap>media/images/box/interaction/LED.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., 0.1)
+        self.onReady() # activate output of the box]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                                            <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                                            <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                                              <Choice value="AllLeds" />
+                                              <Choice value="BrainLeds" />
+                                              <Choice value="EarLeds" />
+                                              <Choice value="FaceLeds" />
+                                              <Choice value="FeetLeds" />
+                                              <Choice value="LeftEarLeds" />
+                                              <Choice value="LeftFaceLeds" />
+                                              <Choice value="LeftFootLeds" />
+                                              <Choice value="RightEarLeds" />
+                                              <Choice value="RightFaceLeds" />
+                                              <Choice value="RightFootLeds" />
+                                            </Parameter>
+                                            <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                                          </Box>
+                                          <Box name="Wait" id="6" localization="8" tooltip="Wait a moment before sending a signal on the output. &#x0A;Can be stopped anytime. &#x0A;Stimulating the input again before output is activated restarts the waiting period.&#x0A;" x="165" y="14">
+                                            <bitmap>media/images/box/wait.png</bitmap>
+                                            <script language="4">
+                                              <content>
+                                                <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.waiting = None
+
+    def onUnload(self):
+        self.cancelWaiting()
+
+    def triggerOutput(self):
+        self.timerOutput()
+
+    def cancelWaiting(self):
+        if self.waiting:
+            self.waiting.cancel()
+        self.waiting = None
+
+    def onInput_onStart(self):
+        self.cancelWaiting()
+        import qi
+        self.waiting = qi.async(self.triggerOutput, delay=int(self.getParameter("Animation duration (s)") * 1000 * 1000))
+
+    def onInput_onStop(self):
+        if self.waiting and self.waiting.isRunning():
+            self.timerOutput()
+        self.onUnload()]]>
+                                              </content>
+                                            </script>
+                                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                            <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Start the Wait box with the configured timeout value." id="2" />
+                                            <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stop the wait and stimulate the output." id="3" />
+                                            <Output name="timerOutput" type="1" type_size="1" nature="1" inner="0" tooltip="Send a bang once time set in parameters is elapsed, or if the box is stopped." id="4" />
+                                            <Parameter name="Animation duration (s)" inherits_from_parent="1" content_type="2" value="10" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="5" />
+                                          </Box>
+                                          <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                          <Link inputowner="1" indexofinput="2" outputowner="3" indexofoutput="3" />
+                                          <Link inputowner="3" indexofinput="2" outputowner="1" indexofoutput="3" />
+                                          <Link inputowner="0" indexofinput="4" outputowner="4" indexofoutput="3" />
+                                          <Link inputowner="6" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                          <Link inputowner="4" indexofinput="2" outputowner="6" indexofoutput="4" />
+                                        </Diagram>
+                                      </BehaviorKeyframe>
+                                    </BehaviorLayer>
+                                  </Timeline>
+                                </Box>
+                                <Link inputowner="7" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                <Link inputowner="0" indexofinput="4" outputowner="6" indexofoutput="3" />
+                                <Link inputowner="0" indexofinput="4" outputowner="7" indexofoutput="4" />
+                                <Link inputowner="0" indexofinput="4" outputowner="10" indexofoutput="4" />
+                                <Link inputowner="5" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                <Link inputowner="10" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                <Link inputowner="1" indexofinput="2" outputowner="5" indexofoutput="4" />
+                                <Link inputowner="0" indexofinput="4" outputowner="1" indexofoutput="3" />
+                                <Link inputowner="6" indexofinput="2" outputowner="2" indexofoutput="4" />
+                                <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
+                              </Diagram>
+                            </BehaviorKeyframe>
+                          </BehaviorLayer>
+                        </Timeline>
+                      </Box>
+                      <Box name="Play robot song" id="3" localization="8" tooltip="Play a sound file. Select the file in parameters. The format of the file can be wav or ogg (on virtual robot) and also mp3 (on a real robot).&#x0A;&#x0A;Note: There can be some delay to play ogg or mp3 (on a robot) files. We advise you to use wav if&#x0A;you want a fast play of the file." x="438" y="303">
+                        <bitmap>media/images/box/interaction/play_music.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.bIsRunning = False
+
+    def onUnload(self):
+        self.bIsRunning = False
+
+    def onInput_onStart(self):
+        self.bIsRunning = True
+
+    def onInput_onStop(self):
+        if( self.bIsRunning ):
+            self.onUnload()
+            self.onStopped()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Starts the music." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stops the music." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished or stopped." id="4" />
+                        <Parameter name="File name" inherits_from_parent="0" content_type="4" value="/../music/Robobozo.mp3" default_value="" tooltip="Name of the file you want to play.&#x0A;&#x0A;Note: You can click on the folder icon to browse the project content or import&#x0A;new files to the project." id="5" />
+                        <Parameter name="Begin position (s)" inherits_from_parent="0" content_type="2" value="0" default_value="0" min="0" max="600" tooltip="Position in seconds where the playing must start." id="6" />
+                        <Parameter name="Volume (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Volume the file is played with." id="7" />
+                        <Parameter name="Balance L/R" inherits_from_parent="0" content_type="2" value="0" default_value="0" min="-1" max="1" tooltip="Value which determines if the sound is played more on the robot&apos;s left or right.&#x0A;You can particularly set it to:&#x0A;- -1 to play only on the left loudspeaker.&#x0A;- 0 to play on both loudspeakers.&#x0A;- 1 to play only on the right loudspeaker." id="8" />
+                        <Parameter name="Play in loop" inherits_from_parent="0" content_type="0" value="0" default_value="0" tooltip="This parameter allows to play the file in loop. The playing will start each time at&#x0A;the beginning of the file." id="9" />
+                        <Timeline enable="0">
+                          <BehaviorLayer name="behavior_layer1">
+                            <BehaviorKeyframe name="keyframe1" index="1">
+                              <Diagram>
+                                <Box name="Play Sound File" id="2" localization="8" tooltip="Play the sound." x="442" y="70">
+                                  <bitmap>media/images/box/interaction/play_music.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[import time
+import string
+
+class MyClass(GeneratedClass):
+    def versionFromText(self, versionString):
+        firstDot = string.find(versionString, '.', 0)
+        if firstDot == -1:
+            return (-1, -1)
+        verMaj = int(versionString[:firstDot])
+        secondDot = string.find(versionString, '.', firstDot + 1)
+        if secondDot == -1:
+            return (verMaj, -1)
+        verMin = int(versionString[firstDot+1:secondDot])
+        return (verMaj, verMin)
+
+    def safeWait(self, module, id, time = 0):
+        if self.versionMajor >= 2 and self.versionMinor > 1:
+            module.wait(id)
+        else:
+            module.wait(id, time)
+
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.player = self.session().service('ALAudioPlayer')
+        self.playerStop = self.session().service('ALAudioPlayer') #Create another service as wait is blocking if audioout is remote
+        self.versionMajor, self.versionMinor = self.versionFromText(self.player.version())
+        self.bIsRunning = False
+        self.ids = []
+
+    def onUnload(self):
+        for id in self.ids:
+            try:
+                self.playerStop.stop(id)
+            except:
+                pass
+        while( self.bIsRunning ):
+            time.sleep( 0.2 )
+
+    def onInput_onStart(self, p):
+        self.bIsRunning = True
+        try:
+            if (self.getParameter("Play in loop")) :
+               id = self.player.pCall("playFileInLoop",p,self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            else :
+               id = self.player.pCall("playFileFromPosition",p,self.getParameter("Begin position (s)"),self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            self.ids.append(id)
+            self.safeWait(self.player, id)
+        finally:
+            try:
+                self.ids.remove(id)
+            except:
+                pass
+            if( self.ids == [] ):
+                self.onStopped() # activate output of the box
+                self.bIsRunning = False
+
+    def onInput_onStop(self):
+        self.onUnload()]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                                  <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                                  <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                                  <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
+                                  <Parameter name="Begin position (s)" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="0" max="600" tooltip="Position in seconds where the playing must start." id="5" />
+                                  <Parameter name="Volume (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Volume the file is played with." id="6" />
+                                  <Parameter name="Balance L/R" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="-1" max="1" tooltip="Value which determines if the sound is played more on the robot&apos;s left or right.&#x0A;You can particularly set it to:&#x0A;- -1 to play only on the left loudspeaker.&#x0A;- 0 to play on both loudspeakers.&#x0A;- 1 to play only on the right loudspeaker." id="7" />
+                                  <Parameter name="Play in loop" inherits_from_parent="1" content_type="0" value="0" default_value="0" tooltip="This parameter allows to play the file in loop. The playing will start each time at&#x0A;the beginning of the file." id="8" />
+                                </Box>
+                                <Box name="Get Attached File" id="1" localization="8" tooltip="Use this box to choose an attached file in its parameters. The filename will be sent on&#x0A;the output when the input is stimulated." x="216" y="71">
+                                  <bitmap>media/images/box/folder.png</bitmap>
+                                  <script language="4">
+                                    <content>
+                                      <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        pass
+
+    def onInput_onStart(self):
+        self.onStopped(self.behaviorAbsolutePath() + self.getParameter("File name"))]]>
+                                    </content>
+                                  </script>
+                                  <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                  <Input name="onStart" type="1" type_size="1" nature="1" inner="0" tooltip="To send the filepath on the output." id="2" />
+                                  <Output name="onStopped" type="3" type_size="1" nature="2" inner="0" tooltip="The filepath of the selected resource file." id="3" />
+                                  <Parameter name="File name" inherits_from_parent="1" content_type="4" value="" default_value="" tooltip="Name of the file which is going to be sent on the box output.&#x0A;&#x0A;Note: You can click on the folder icon to browse the project content or import&#x0A;new files to the project." id="4" />
+                                </Box>
+                                <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+                                <Link inputowner="1" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                <Link inputowner="2" indexofinput="2" outputowner="1" indexofoutput="3" />
+                              </Diagram>
+                            </BehaviorKeyframe>
+                          </BehaviorLayer>
+                        </Timeline>
+                        <Resource name="Audio player" type="Lock" timeout="0" />
+                      </Box>
+                      <Box name="Wait For Signals" id="4" localization="8" tooltip="Wait for both inputs to be stimulated before stimulating its output." x="972" y="316">
+                        <bitmap>media/images/box/wait.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.ok = [False]*2
+
+    def onUnload(self):
+        #puts code for box cleanup here
+        ""
+
+    def onStart(self, nInput):
+        self.ok[nInput-1] = True
+        bOutput = True
+        for bOk in self.ok:
+            bOutput = bOutput and bOk
+        if( bOutput ):
+            self.ok = [False]*2
+            self.signalsReceived()
+
+    def onInput_signal1(self):
+        self.onStart(1)
+
+    def onInput_signal2(self):
+        self.onStart(2)]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                        <Input name="signal1" type="1" type_size="1" nature="1" inner="0" tooltip="First signal to wait." id="2" />
+                        <Input name="signal2" type="1" type_size="1" nature="1" inner="0" tooltip="Second signal to wait." id="3" />
+                        <Output name="signalsReceived" type="1" type_size="1" nature="2" inner="0" tooltip="Signal sent when both inputs have been stimulated." id="4" />
+                      </Box>
+                      <Link inputowner="1" indexofinput="2" outputowner="2" indexofoutput="4" />
+                      <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="8" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="0" indexofinput="4" outputowner="1" indexofoutput="4" />
+                      <Link inputowner="4" indexofinput="2" outputowner="3" indexofoutput="4" />
+                      <Link inputowner="4" indexofinput="3" outputowner="8" indexofoutput="4" />
+                      <Link inputowner="0" indexofinput="4" outputowner="4" indexofoutput="4" />
+                    </Diagram>
+                  </BehaviorKeyframe>
+                </BehaviorLayer>
+              </Timeline>
+            </Box>
+            <Link inputowner="0" indexofinput="4" outputowner="4" indexofoutput="4" />
+            <Link inputowner="4" indexofinput="2" outputowner="7" indexofoutput="4" />
+            <Link inputowner="7" indexofinput="2" outputowner="0" indexofoutput="2" />
+          </Diagram>
+        </BehaviorKeyframe>
+      </BehaviorLayer>
+    </Timeline>
+  </Box>
+</ChoregrapheProject>

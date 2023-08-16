@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ChoregrapheProject xmlns="http://www.ald.softbankrobotics.com/schema/choregraphe/project.xsd" xar_version="3">
+  <Box name="root" id="-1" localization="8" tooltip="Root box of Choregraphe&apos;s behavior. Highest level possible." x="0" y="0">
+    <bitmap>media/images/box/root.png</bitmap>
+    <script language="4">
+      <content>
+        <![CDATA[]]>
+      </content>
+    </script>
+    <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+    <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+    <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+    <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+    <Timeline enable="0">
+      <BehaviorLayer name="behavior_layer1">
+        <BehaviorKeyframe name="keyframe1" index="1">
+          <Diagram>
+            <Box name="Twinkle" id="4" localization="8" tooltip="The selected LEDs flash on and off during the time defined in parameters." x="189" y="84">
+              <bitmap>media/images/box/interaction/LED.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+              <Parameter name="LEDs group" inherits_from_parent="0" content_type="3" value="AllLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="5">
+                <Choice value="AllLeds" />
+                <Choice value="BrainLeds" />
+                <Choice value="EarLeds" />
+                <Choice value="FaceLeds" />
+                <Choice value="FeetLeds" />
+                <Choice value="LeftEarLeds" />
+                <Choice value="LeftFaceLeds" />
+                <Choice value="LeftFootLeds" />
+                <Choice value="RightEarLeds" />
+                <Choice value="RightFaceLeds" />
+                <Choice value="RightFootLeds" />
+              </Parameter>
+              <Parameter name="Time to flash on (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+              <Parameter name="Time to flash off (s)" inherits_from_parent="0" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="7" />
+              <Parameter name="Animation duration (s)" inherits_from_parent="0" content_type="2" value="5" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="8" />
+              <Timeline enable="0">
+                <BehaviorLayer name="behavior_layer1">
+                  <BehaviorKeyframe name="keyframe1" index="1">
+                    <Diagram>
+                      <Box name="Set LEDs" id="3" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="176" y="119">
+                        <bitmap>media/images/box/interaction/LED.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash on (s)"))
+        self.onReady() # activate output of the box]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                        <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                        <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                          <Choice value="AllLeds" />
+                          <Choice value="BrainLeds" />
+                          <Choice value="EarLeds" />
+                          <Choice value="FaceLeds" />
+                          <Choice value="FeetLeds" />
+                          <Choice value="LeftEarLeds" />
+                          <Choice value="LeftFaceLeds" />
+                          <Choice value="LeftFootLeds" />
+                          <Choice value="RightEarLeds" />
+                          <Choice value="RightFaceLeds" />
+                          <Choice value="RightFootLeds" />
+                        </Parameter>
+                        <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                        <Parameter name="Time to flash on (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                      </Box>
+                      <Box name="Set LEDs" id="1" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="180" y="262">
+                        <bitmap>media/images/box/interaction/LED.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Time to flash off (s)"))
+        self.onReady() # activate output of the box]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                        <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                        <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                          <Choice value="AllLeds" />
+                          <Choice value="BrainLeds" />
+                          <Choice value="EarLeds" />
+                          <Choice value="FaceLeds" />
+                          <Choice value="FeetLeds" />
+                          <Choice value="LeftEarLeds" />
+                          <Choice value="LeftFaceLeds" />
+                          <Choice value="LeftFootLeds" />
+                          <Choice value="RightEarLeds" />
+                          <Choice value="RightFaceLeds" />
+                          <Choice value="RightFootLeds" />
+                        </Parameter>
+                        <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                        <Parameter name="Time to flash off (s)" inherits_from_parent="1" content_type="2" value="0.5" default_value="0.5" min="0.1" max="2" tooltip="How much time to go to the intensity in seconds." id="6" />
+                      </Box>
+                      <Box name="Set LEDs" id="4" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="308" y="12">
+                        <bitmap>media/images/box/interaction/LED.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., 0.1)
+        self.onReady() # activate output of the box]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+                        <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+                        <Parameter name="LEDs group" inherits_from_parent="1" content_type="3" value="FaceLeds" default_value="FaceLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                          <Choice value="AllLeds" />
+                          <Choice value="BrainLeds" />
+                          <Choice value="EarLeds" />
+                          <Choice value="FaceLeds" />
+                          <Choice value="FeetLeds" />
+                          <Choice value="LeftEarLeds" />
+                          <Choice value="LeftFaceLeds" />
+                          <Choice value="LeftFootLeds" />
+                          <Choice value="RightEarLeds" />
+                          <Choice value="RightFaceLeds" />
+                          <Choice value="RightFootLeds" />
+                        </Parameter>
+                        <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+                      </Box>
+                      <Box name="Wait" id="6" localization="8" tooltip="Wait a moment before sending a signal on the output. &#x0A;Can be stopped anytime. &#x0A;Stimulating the input again before output is activated restarts the waiting period.&#x0A;" x="165" y="14">
+                        <bitmap>media/images/box/wait.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.waiting = None
+
+    def onUnload(self):
+        self.cancelWaiting()
+
+    def triggerOutput(self):
+        self.timerOutput()
+
+    def cancelWaiting(self):
+        if self.waiting:
+            self.waiting.cancel()
+        self.waiting = None
+
+    def onInput_onStart(self):
+        self.cancelWaiting()
+        import qi
+        self.waiting = qi.async(self.triggerOutput, delay=int(self.getParameter("Animation duration (s)") * 1000 * 1000))
+
+    def onInput_onStop(self):
+        if self.waiting and self.waiting.isRunning():
+            self.timerOutput()
+        self.onUnload()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Start the Wait box with the configured timeout value." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stop the wait and stimulate the output." id="3" />
+                        <Output name="timerOutput" type="1" type_size="1" nature="1" inner="0" tooltip="Send a bang once time set in parameters is elapsed, or if the box is stopped." id="4" />
+                        <Parameter name="Animation duration (s)" inherits_from_parent="1" content_type="2" value="10" default_value="10" min="0.1" max="5000" tooltip="Duration of the animation of LEDs." id="5" />
+                      </Box>
+                      <Link inputowner="3" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="1" indexofinput="2" outputowner="3" indexofoutput="3" />
+                      <Link inputowner="3" indexofinput="2" outputowner="1" indexofoutput="3" />
+                      <Link inputowner="0" indexofinput="4" outputowner="4" indexofoutput="3" />
+                      <Link inputowner="6" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="4" indexofinput="2" outputowner="6" indexofoutput="4" />
+                    </Diagram>
+                  </BehaviorKeyframe>
+                </BehaviorLayer>
+              </Timeline>
+            </Box>
+            <Box name="Play ping sound" id="5" localization="8" tooltip="Play a sound file. Select the file in parameters. The format of the file can be wav or ogg (on virtual robot) and also mp3 (on a real robot).&#x0A;&#x0A;Note: There can be some delay to play ogg or mp3 (on a robot) files. We advise you to use wav if&#x0A;you want a fast play of the file." x="238" y="299">
+              <bitmap>media/images/box/interaction/play_music.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.bIsRunning = False
+
+    def onUnload(self):
+        self.bIsRunning = False
+
+    def onInput_onStart(self):
+        self.bIsRunning = True
+
+    def onInput_onStop(self):
+        if( self.bIsRunning ):
+            self.onUnload()
+            self.onStopped()]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Starts the music." id="2" />
+              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Stops the music." id="3" />
+              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished or stopped." id="4" />
+              <Parameter name="File name" inherits_from_parent="0" content_type="4" value="/../music/notification-37858.mp3" default_value="" tooltip="Name of the file you want to play.&#x0A;&#x0A;Note: You can click on the folder icon to browse the project content or import&#x0A;new files to the project." id="5" />
+              <Parameter name="Begin position (s)" inherits_from_parent="0" content_type="2" value="0" default_value="0" min="0" max="600" tooltip="Position in seconds where the playing must start." id="6" />
+              <Parameter name="Volume (%)" inherits_from_parent="0" content_type="1" value="81" default_value="100" min="0" max="100" tooltip="Volume the file is played with." id="7" />
+              <Parameter name="Balance L/R" inherits_from_parent="0" content_type="2" value="0.0105" default_value="0" min="-1" max="1" tooltip="Value which determines if the sound is played more on the robot&apos;s left or right.&#x0A;You can particularly set it to:&#x0A;- -1 to play only on the left loudspeaker.&#x0A;- 0 to play on both loudspeakers.&#x0A;- 1 to play only on the right loudspeaker." id="8" />
+              <Parameter name="Play in loop" inherits_from_parent="0" content_type="0" value="0" default_value="0" tooltip="This parameter allows to play the file in loop. The playing will start each time at&#x0A;the beginning of the file." id="9" />
+              <Timeline enable="0">
+                <BehaviorLayer name="behavior_layer1">
+                  <BehaviorKeyframe name="keyframe1" index="1">
+                    <Diagram>
+                      <Box name="Play Sound File" id="2" localization="8" tooltip="Play the sound." x="442" y="70">
+                        <bitmap>media/images/box/interaction/play_music.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[import time
+import string
+
+class MyClass(GeneratedClass):
+    def versionFromText(self, versionString):
+        firstDot = string.find(versionString, '.', 0)
+        if firstDot == -1:
+            return (-1, -1)
+        verMaj = int(versionString[:firstDot])
+        secondDot = string.find(versionString, '.', firstDot + 1)
+        if secondDot == -1:
+            return (verMaj, -1)
+        verMin = int(versionString[firstDot+1:secondDot])
+        return (verMaj, verMin)
+
+    def safeWait(self, module, id, time = 0):
+        if self.versionMajor >= 2 and self.versionMinor > 1:
+            module.wait(id)
+        else:
+            module.wait(id, time)
+
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.player = self.session().service('ALAudioPlayer')
+        self.playerStop = self.session().service('ALAudioPlayer') #Create another service as wait is blocking if audioout is remote
+        self.versionMajor, self.versionMinor = self.versionFromText(self.player.version())
+        self.bIsRunning = False
+        self.ids = []
+
+    def onUnload(self):
+        for id in self.ids:
+            try:
+                self.playerStop.stop(id)
+            except:
+                pass
+        while( self.bIsRunning ):
+            time.sleep( 0.2 )
+
+    def onInput_onStart(self, p):
+        self.bIsRunning = True
+        try:
+            if (self.getParameter("Play in loop")) :
+               id = self.player.pCall("playFileInLoop",p,self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            else :
+               id = self.player.pCall("playFileFromPosition",p,self.getParameter("Begin position (s)"),self.getParameter("Volume (%)")/100.,self.getParameter("Balance L/R"))
+            self.ids.append(id)
+            self.safeWait(self.player, id)
+        finally:
+            try:
+                self.ids.remove(id)
+            except:
+                pass
+            if( self.ids == [] ):
+                self.onStopped() # activate output of the box
+                self.bIsRunning = False
+
+    def onInput_onStop(self):
+        self.onUnload()]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                        <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
+                        <Parameter name="Begin position (s)" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="0" max="600" tooltip="Position in seconds where the playing must start." id="5" />
+                        <Parameter name="Volume (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="0" max="100" tooltip="Volume the file is played with." id="6" />
+                        <Parameter name="Balance L/R" inherits_from_parent="1" content_type="2" value="0" default_value="0" min="-1" max="1" tooltip="Value which determines if the sound is played more on the robot&apos;s left or right.&#x0A;You can particularly set it to:&#x0A;- -1 to play only on the left loudspeaker.&#x0A;- 0 to play on both loudspeakers.&#x0A;- 1 to play only on the right loudspeaker." id="7" />
+                        <Parameter name="Play in loop" inherits_from_parent="1" content_type="0" value="0" default_value="0" tooltip="This parameter allows to play the file in loop. The playing will start each time at&#x0A;the beginning of the file." id="8" />
+                      </Box>
+                      <Box name="Get Attached File" id="1" localization="8" tooltip="Use this box to choose an attached file in its parameters. The filename will be sent on&#x0A;the output when the input is stimulated." x="216" y="71">
+                        <bitmap>media/images/box/folder.png</bitmap>
+                        <script language="4">
+                          <content>
+                            <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        pass
+
+    def onInput_onStart(self):
+        self.onStopped(self.behaviorAbsolutePath() + self.getParameter("File name"))]]>
+                          </content>
+                        </script>
+                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                        <Input name="onStart" type="1" type_size="1" nature="1" inner="0" tooltip="To send the filepath on the output." id="2" />
+                        <Output name="onStopped" type="3" type_size="1" nature="2" inner="0" tooltip="The filepath of the selected resource file." id="3" />
+                        <Parameter name="File name" inherits_from_parent="1" content_type="4" value="" default_value="" tooltip="Name of the file which is going to be sent on the box output.&#x0A;&#x0A;Note: You can click on the folder icon to browse the project content or import&#x0A;new files to the project." id="4" />
+                      </Box>
+                      <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+                      <Link inputowner="1" indexofinput="2" outputowner="0" indexofoutput="2" />
+                      <Link inputowner="2" indexofinput="2" outputowner="1" indexofoutput="3" />
+                    </Diagram>
+                  </BehaviorKeyframe>
+                </BehaviorLayer>
+              </Timeline>
+              <Resource name="Audio player" type="Lock" timeout="0" />
+            </Box>
+            <Box name="Wait For Signals" id="6" localization="8" tooltip="Wait for both inputs to be stimulated before stimulating its output." x="608" y="156">
+              <bitmap>media/images/box/wait.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.ok = [False]*2
+
+    def onUnload(self):
+        #puts code for box cleanup here
+        ""
+
+    def onStart(self, nInput):
+        self.ok[nInput-1] = True
+        bOutput = True
+        for bOk in self.ok:
+            bOutput = bOutput and bOk
+        if( bOutput ):
+            self.ok = [False]*2
+            self.signalsReceived()
+
+    def onInput_signal1(self):
+        self.onStart(1)
+
+    def onInput_signal2(self):
+        self.onStart(2)]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+              <Input name="signal1" type="1" type_size="1" nature="1" inner="0" tooltip="First signal to wait." id="2" />
+              <Input name="signal2" type="1" type_size="1" nature="1" inner="0" tooltip="Second signal to wait." id="3" />
+              <Output name="signalsReceived" type="1" type_size="1" nature="2" inner="0" tooltip="Signal sent when both inputs have been stimulated." id="4" />
+            </Box>
+            <Box name="Reset ear LEDs" id="7" localization="8" tooltip="Set the intensity of all the LEDs of one of or both ears." x="358" y="47">
+              <bitmap>media/images/box/interaction/LED.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.fadeOps = []
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onStart(self):
+        if( self.getParameter("Side") == "Left" ):
+            sGroup = "LeftEarLeds"
+        elif( self.getParameter("Side") == "Right" ):
+            sGroup = "RightEarLeds"
+        else:
+            sGroup = "EarLeds"
+        fadeOp = self.leds.fade(sGroup, self.getParameter("Intensity (%)")/100., self.getParameter("Duration (s)"), _async=True)
+        self.fadeOps.append(fadeOp)
+        fadeOp.wait()
+        self.fadeOps.remove(fadeOp)
+        if( self.fadeOps == [] ):
+            self.onDone() # activate output of the box]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+              <Output name="onDone" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="3" />
+              <Parameter name="Side" inherits_from_parent="0" content_type="3" value="Both" default_value="Both" custom_choice="0" tooltip="Choose the ear where the LED light is set." id="4">
+                <Choice value="Both" />
+                <Choice value="Left" />
+                <Choice value="Right" />
+              </Parameter>
+              <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="LEDs intensity, from 0 (off) to 100 (max)." id="5" />
+              <Parameter name="Duration (s)" inherits_from_parent="0" content_type="2" value="0.1" default_value="0.1" min="0" max="5" tooltip="Transition&apos;s duration in seconds." id="6" />
+            </Box>
+            <Box name="Reset feet LEDs" id="8" localization="8" tooltip="Set the intensity of the LEDs of a given group." x="360" y="162">
+              <bitmap>media/images/box/interaction/LED.png</bitmap>
+              <script language="4">
+                <content>
+                  <![CDATA[class MyClass(GeneratedClass):
+    def __init__(self):
+        GeneratedClass.__init__(self, False)
+
+    def onLoad(self):
+        self.leds = self.session().service("ALLeds")
+
+    def onUnload(self):
+        #~ puts code for box cleanup here
+        pass
+
+    def onInput_onSet(self):
+        self.leds.fade(self.getParameter("LEDs group"), self.getParameter("Intensity (%)")/100., self.getParameter("Duration (s)"))
+        self.onReady() # activate output of the box]]>
+                </content>
+              </script>
+              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+              <Input name="onSet" type="1" type_size="1" nature="2" inner="0" tooltip="When this input is stimulated, the intensity of all the LEDs from the group is&#x0A;set to the intensity parameter value." id="2" />
+              <Output name="onReady" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when LEDs intensity has been set." id="3" />
+              <Parameter name="LEDs group" inherits_from_parent="0" content_type="3" value="FeetLeds" default_value="EarLeds" custom_choice="1" tooltip="The group of LEDs which intensity is to set.&#x0A;&#x0A;Note: You can call the listGroups() method of ALMotion to get the name of LEDs&#x0A;groups which are not listed here." id="4">
+                <Choice value="AllLeds" />
+                <Choice value="BrainLeds" />
+                <Choice value="EarLeds" />
+                <Choice value="FaceLeds" />
+                <Choice value="FeetLeds" />
+                <Choice value="LeftEarLeds" />
+                <Choice value="LeftFaceLeds" />
+                <Choice value="LeftFootLeds" />
+                <Choice value="RightEarLeds" />
+                <Choice value="RightFaceLeds" />
+                <Choice value="RightFootLeds" />
+              </Parameter>
+              <Parameter name="Intensity (%)" inherits_from_parent="0" content_type="1" value="0" default_value="100" min="0" max="100" tooltip="Intensity all the LEDs from the group is set to." id="5" />
+              <Parameter name="Duration (s)" inherits_from_parent="0" content_type="2" value="1" default_value="1" min="0" max="60" tooltip="How much time to go to the max/min intensity in seconds." id="6" />
+            </Box>
+            <Link inputowner="4" indexofinput="2" outputowner="0" indexofoutput="2" />
+            <Link inputowner="5" indexofinput="2" outputowner="0" indexofoutput="2" />
+            <Link inputowner="0" indexofinput="4" outputowner="6" indexofoutput="4" />
+            <Link inputowner="7" indexofinput="2" outputowner="4" indexofoutput="4" />
+            <Link inputowner="8" indexofinput="2" outputowner="4" indexofoutput="4" />
+            <Link inputowner="6" indexofinput="3" outputowner="5" indexofoutput="4" />
+            <Link inputowner="6" indexofinput="2" outputowner="7" indexofoutput="3" />
+            <Link inputowner="6" indexofinput="2" outputowner="8" indexofoutput="3" />
+          </Diagram>
+        </BehaviorKeyframe>
+      </BehaviorLayer>
+    </Timeline>
+  </Box>
+</ChoregrapheProject>

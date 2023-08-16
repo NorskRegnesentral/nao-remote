@@ -1,0 +1,19 @@
+# This is a sample configuration file for configuring the remote.
+# This means that you can set the hostname and path to certificates.
+# The current defaults are listed as comments below.
+
+[nao-remote-server]
+# The port has always been 9526, but you can change it if you want.
+# port = 9526
+
+# if these aren't listed the script will look for things in a certs
+# directory beside the script (assumes that hostname is nao1.ad.nr.no:
+# certs/nao1.ad.nr.no.key
+# certs/nao1_ad_nr_no_cert.cer
+
+# keyfile = /path/to/certs/cert.key
+# certfile = /path/to/certs/cert.cer
+
+# Assuming that public is right by the server.py script
+# so closer to os.path.join(os.path.dirname(os.path.realpath(__file__)), "public")
+# public_root = public
