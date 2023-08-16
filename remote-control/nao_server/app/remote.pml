@@ -35,13 +35,14 @@
     </Resources>
     <Topics />
     <IgnoredPaths>
-        <Path src=".metadata" />
         <Path src="translations/translation_en_US.ts" />
-        <Path src="translations" />
         <Path src="scripts/remote.py" />
+        <Path src=".metadata" />
+        <Path src="translations" />
         <Path src="scripts/stk/__pycache__" />
     </IgnoredPaths>
     <Translations auto-fill="en_US">
         <Translation name="translation_en_US" src="translations/translation_en_US.ts" language="en_US" />
+        <Translation name="translation_nn_NO" src="translations/translation_nn_NO.ts" language="nn_NO" />
     </Translations>
 </Package>
