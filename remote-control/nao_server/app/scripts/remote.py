@@ -93,6 +93,8 @@ class Remote(object):
 
         """
 
+        nao_behavior = ""
+
         if behavior_name == "wake_up":
             self.s.ALMotion.wakeUp()  # the robot wakes up and stands up
 
@@ -114,10 +116,40 @@ class Remote(object):
         elif "tts" in behavior_name:  # the robot speaks the given text
             self.text_to_speech(behavior_name)
 
+        elif behavior_name == "dance_electroswing":
+            nao_behavior = 'electro-swing'
+
+        elif behavior_name == "dance_getlucky":
+            nao_behavior = 'get-lucky'
+
+        elif behavior_name == "dance_thriller":
+            nao_behavior = 'thriller-se'
+
+        elif behavior_name == "dance_hskt":
+            nao_behavior = 'head-shoulders-knees-toes'
+
+        elif behavior_name == "dance_softrobot":
+            nao_behavior = 'softrobot'
+
+        elif behavior_name == "dance_wheels":
+            nao_behavior = 'wheels-on-the-bus'
+
+        elif behavior_name == "dance_stars":
+            nao_behavior = 'twinkle-twinkle-little-star'
+
+        elif behavior_name == "dance_hush":
+            nao_behavior = 'hush-little-baby'
+
+        elif behavior_name == "dance_abc":
+            nao_behavior = 'abc-song'
+
         # if it's none of the above, it's supposed to be run with the ALBehaviorManager service
         # it is then a choregraphe project that is run
         else:
-            self.s.ALBehaviorManager.runBehavior("nr_remote_control/" + behavior_name)
+            nao_behavior = "nr_remote_control/" + behavior_name
+
+        if len(nao_behavior) > 0:
+            self.s.ALBehaviorManager.runBehavior(nao_behavior)
 
     def connect_behavior_channel(self):
         """
