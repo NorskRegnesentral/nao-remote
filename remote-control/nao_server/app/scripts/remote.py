@@ -16,7 +16,9 @@ import zmq
 
 class Remote(object):
     APP_ID = "no.nr.remote"
-    DIR_PATH = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()), APP_ID)
+    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
+    # Nao5 doesn't have /var/run, so use tmp instead.
+    DIR_PATH = os.path.join(BASE_DIR, APP_ID) if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", APP_ID) 
 
     def __init__(self, qiapp):
         self.qiapp = qiapp
@@ -26,9 +28,7 @@ class Remote(object):
         self.muted = False
         self.s.ALAudioDevice.setOutputVolume(self.current_volume)
         self.logger = stk.logging.get_logger(qiapp.session, Remote.APP_ID)
-        # Nao5 doesn't have /var/run, so use tmp instead.
-        if not os.path.exists(os.path.join(os.path.sep, "var", "run" "user")):
-            Remote.DIR_PATH = os.path.join(os.path.sep, "tmp", Remote.APP_ID)
+
 
     def get_volume(self):
         """
@@ -122,8 +122,8 @@ class Remote(object):
         elif behavior_name == "dance_getlucky":
             nao_behavior = 'get-lucky'
 
-        elif behavior_name == "dance_thriller":
-            nao_behavior = 'thriller-se'
+        elif behavior_name == "dance_spooky":
+            nao_behavior = 'spooky-dance'
 
         elif behavior_name == "dance_hskt":
             nao_behavior = 'head-shoulders-knees-toes'

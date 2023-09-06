@@ -47,9 +47,9 @@ class NotFoundHandler(tornado.web.RequestHandler):
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     # FixMe, what is the correct thing here?
 
-    DIR_PATH = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()), "no.nr.remote")
-    if not os.path.exists(os.path.join(os.path.sep, "var", "run" "user")):
-        DIR_PATH = os.path.join(os.path.sep, "tmp", "no.nr.remote")
+    APP_ID = "no.nr.remote"
+    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
+    DIR_PATH = os.path.join(BASE_DIR, APP_ID) if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", APP_ID)
 
     def check_origin(self, origin):
         return True
