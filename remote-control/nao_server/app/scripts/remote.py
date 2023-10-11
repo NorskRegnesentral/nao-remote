@@ -26,6 +26,7 @@ class Remote(object):
         self.s = stk.services.ServiceCache(qiapp.session)
         self.current_volume = 50
         self.muted = False
+        self.autonomous_state = self.s.ALAutonomousLife.getState()
         self.s.ALAudioDevice.setOutputVolume(self.current_volume)
         self.logger = stk.logging.get_logger(qiapp.session, Remote.APP_ID)
 
@@ -81,6 +82,11 @@ class Remote(object):
         else:
             self.s.ALAudioDevice.setOutputVolume(self.current_volume)
 
+    def changeAutonmousLife(self, new_state):
+        if new_state != self.autonomous_state:
+            self.autonomous_state = new_state
+            self.s.ALAutonomousLife.setState(new_state)
+
     def behavior_to_run(self, behavior_name):
         """
         Function that runs the behavior that corresponds to the
@@ -112,6 +118,10 @@ class Remote(object):
 
         elif behavior_name == "mute" or behavior_name == "unmute":
             self.muteRobot(behavior_name == "mute")
+
+        elif behavior_name == "autonomous_life" or behavior_name == "no_autonomous_life":
+            self.changeAutonmousLife(
+                "disabled" if behavior_name == "no_autonomous_life" else "solitary")
 
         elif "tts" in behavior_name:  # the robot speaks the given text
             self.text_to_speech(behavior_name)

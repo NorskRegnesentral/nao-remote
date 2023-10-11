@@ -16,6 +16,17 @@ window.onload = function () { // a function that is done as soon as the page loa
 	    socket.send("mute");
 	}
     });
+
+    let autoButton = document.getElementById("autoButton");
+    autoButton.addEventListener('click', event => {
+        if (autoButton.getAttribute('aria-pressed') === 'true') {
+            autoButton.removeAttribute('aria-pressed');
+            socket.send("no_autonomous_life");
+        } else {
+            autoButton.setAttribute('aria-pressed');
+            socket.send('autonomous_life');
+        }
+    });
 };
 
 function sendButtonMessage(value) {
