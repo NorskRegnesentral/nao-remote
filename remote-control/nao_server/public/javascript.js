@@ -5,23 +5,22 @@ var session;
 var hostname = window.location.hostname;
 var socket = new WebSocket("wss://" + hostname + ":9526/websocket");
 
-function addToggleFunction(elementID) {
-    let button = document.getElementId(elementID);
+function addToggleFunction(document, elementID, command1, command2) {
+    let button = document.getElementById(elementID);
     button.addEventListener('click', event => {
 	if (button.getAttribute('aria-pressed') === 'true') {
 	    button.removeAttribute('aria-pressed');
-	    socket.send("unmute");
+	    socket.send(command1);
 	} else {
 	    button.setAttribute('aria-pressed', 'true');
-	    socket.send("mute");
+	    socket.send(command2);
 	}
     });
-
 }
 
 window.onload = function () { // a function that is done as soon as the page loads
-    addToggleFunction("muteButton");
-    addToggleFunction("autoButton");
+    addToggleFunction(document, "muteButton", "unmute", "mute");
+    addToggleFunction(document, "autoButton", "no_autonomous_life", "autonomous_life");
 };
 
 function sendButtonMessage(value) {
