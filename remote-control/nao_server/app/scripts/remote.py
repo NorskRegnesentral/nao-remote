@@ -26,7 +26,7 @@ class Remote(object):
         self.s = stk.services.ServiceCache(qiapp.session)
         self.current_volume = 50
         self.muted = False
-        self.autonomous_state = self.s.ALAutonomousLife.getState()
+        self.autonomous_state = "disabled"
         self.s.ALAudioDevice.setOutputVolume(self.current_volume)
         self.logger = stk.logging.get_logger(qiapp.session, Remote.APP_ID)
 
