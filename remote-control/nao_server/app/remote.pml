@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Package name="remote" format_version="5">
+<Package name="remote" format_version="4">
     <Manifest src="manifest.xml" />
     <BehaviorDescriptions>
         <BehaviorDescription name="behavior" src="." xar="behavior.xar" />
@@ -17,6 +17,7 @@
         <BehaviorDescription name="behavior" src="raise_hand" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="thinking" xar="behavior.xar" />
         <BehaviorDescription name="behavior" src="exciting_fun" xar="behavior.xar" />
+        <BehaviorDescription name="behavior" src="cyberbook_cheer" xar="behavior.xar" />
     </BehaviorDescriptions>
     <Dialogs />
     <Resources>
@@ -35,14 +36,11 @@
     </Resources>
     <Topics />
     <IgnoredPaths>
-        <Path src="translations/translation_en_US.ts" />
-        <Path src="scripts/remote.py" />
+        <Path src="translations/translation_en_US.qm" />
         <Path src=".metadata" />
+        <Path src="translations/translation_nn_NO.ts" />
+        <Path src="translations/translation_en_US.ts" />
         <Path src="translations" />
-        <Path src="scripts/stk/__pycache__" />
+        <Path src="scripts/remote.py" />
     </IgnoredPaths>
-    <Translations auto-fill="en_US">
-        <Translation name="translation_en_US" src="translations/translation_en_US.ts" language="en_US" />
-        <Translation name="translation_nn_NO" src="translations/translation_nn_NO.ts" language="nn_NO" />
-    </Translations>
 </Package>

@@ -31,6 +31,8 @@ socket_clients = set()
 class HelloWorldHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
+    def put(self):
+        self.write("Called put!")
 
 
 class NotFoundHandler(tornado.web.RequestHandler):
