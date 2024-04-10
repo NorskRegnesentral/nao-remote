@@ -25,8 +25,97 @@ import tornado.websocket
 import ssl
 import os
 
-socket_clients = set()
 
+class RemoteApplication(tornado.web.Application):
+    APP_ID = "no.nr.remote"
+    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
+    DIR_PATH = os.path.join(BASE_DIR, APP_ID) if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", APP_ID)
+
+    def __init__(self, public_root: str):
+        self.context = zmq.Context()  # Create a context (containter for all sockets in a process)
+        self._test_and_make_dir()  # making directory for socket bindings
+        self._connect_behavior_channel()  # binding to the behavior channel
+        self._connect_confirmation_channel()  # binding to the confirmation channel
+        self.socket_clients = set()
+
+        handlers = [
+            (r'/', HelloWorldHandler),
+            (r'/websocket', WebSocketHandler),
+            (r'/(.*)', tornado.web.StaticFileHandler, {'path': public_root}),
+        ]
+
+        settings = dict(
+            debug=True,
+            template_path=public_root,
+            default_handler_class=NotFoundHandler
+        )
+        super(RemoteApplication, self).__init__(handlers, **settings)
+
+    def cleanup(self):
+        self.stream_sub.close()
+        self.context.destroy()
+
+    def _test_and_make_dir(self):
+        """
+        Making a directory for aiding the communication between the server and
+        remote. The method creates the directory in /tmp if it doesn't already exist.
+        """
+        print("does {} exist?", RemoteApplication.DIR_PATH)
+
+        if not os.path.exists(RemoteApplication.DIR_PATH):
+            print("No, make it")
+            os.makedirs(RemoteApplication.DIR_PATH)
+
+    def _connect_behavior_channel(self):
+        """ Creating a publishing socket and binding it to the given address. """
+
+        binding_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "behaviors")
+        print("bind on {}", binding_address)
+
+        self.socket_beh = self.context.socket(zmq.PUB)  # Creating a publisher socket
+        self.socket_beh.bind(binding_address)  # Bind the socket to given address
+
+        print("Connected to behavior channel.")
+
+    def _connect_confirmation_channel(self):
+        """
+        Creating a subscriber socket for receiving confirmation messages
+        from the remote and connecting to the given address in order to
+        communicate with the remote.
+
+        We also create a stream for listening for messages from the remote. When
+        the remote sends a message it is received and the "process_message"
+        method is invoked.
+        """
+
+        self.test_and_make_dir()
+        connection_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "cmd_status")
+        print("connect on {}", connection_address)
+        self.socket_status = self.context.socket(zmq.SUB)  # subscriber socket
+        self.socket_status.connect(connection_address)  # connecting to the correct address
+        self.socket_status.setsockopt_string(zmq.SUBSCRIBE, "")  # specifying topic it should listen to
+
+        self.stream_sub = zmqstream.ZMQStream(self.socket_status)
+        self.stream_sub.on_recv(self._process_message)  # starts listening for messages on this channel
+
+        print("Connected to task confirmation channel.")
+
+    def _process_message(self, msg: List[bytes]):
+        """
+        Message handler: when a confirmation message is sent from the remote,
+        this method is invoked and prints out a message to the user.
+
+        Args:
+            msg (list): the message sent by the remote
+        """
+
+        decoded_msg = msg[0].decode("utf-8")
+        if decoded_msg == "Behavior finished":
+            print("Successfully completed task :)\n")
+        else:
+            print("The task failed for some reason :(\n")
+
+        
 
 class HelloWorldHandler(tornado.web.RequestHandler):
     def get(self):
@@ -48,83 +137,15 @@ class NotFoundHandler(tornado.web.RequestHandler):
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     # FixMe, what is the correct thing here?
-
-    APP_ID = "no.nr.remote"
-    BASE_DIR = os.path.join(os.path.sep, "var", "run", "user", str(os.getuid()))
-    DIR_PATH = os.path.join(BASE_DIR, APP_ID) if os.path.exists(BASE_DIR) else os.path.join(os.path.sep, "tmp", APP_ID)
-
     def check_origin(self, origin):
         return True
 
-    def test_and_make_dir(self):
-        """
-        Making a directory for aiding the communication between the server and
-        remote. The method creates the directory in /tmp if it doesn't already exist.
-        """
-        print("does {} exist?", WebSocketHandler.DIR_PATH)
-
-        if not os.path.exists(WebSocketHandler.DIR_PATH):
-            print("No, make it")
-            os.makedirs(WebSocketHandler.DIR_PATH)
-
-    def connect_behavior_channel(self, context):
-        """ Creating a publishing socket and binding it to the given address. """
-
-        binding_address = "ipc://" + os.path.join(WebSocketHandler.DIR_PATH, "behaviors")
-        print("bind on {}", binding_address)
-
-        self.socket_beh = self.context.socket(zmq.PUB)  # Creating a publisher socket
-        self.socket_beh.bind(binding_address)  # Bind the socket to given address
-
-        print("Connected to behavior channel.")
-
-    def process_message(self, msg):
-        """
-        Message handler: when a confirmation message is sent from the remote,
-        this method is invoked and prints out a message to the user.
-
-        Args:
-            msg (list): the message sent by the remote
-        """
-
-        decoded_msg = msg[0].decode("utf-8")
-        if decoded_msg == "Behavior finished":
-            print("Successfully completed task :)\n")
-        else:
-            print("The task failed for some reason :(\n")
-
-    def connect_confirmation_channel(self, context):
-        """
-        Creating a subscriber socket for receiving confirmation messages
-        from the remote and connecting to the given address in order to
-        communicate with the remote.
-
-        We also create a stream for listening for messages from the remote. When
-        the remote sends a message it is received and the "process_message"
-        method is invoked.
-        """
-
-        self.test_and_make_dir()
-        connection_address = "ipc://" + os.path.join(WebSocketHandler.DIR_PATH, "cmd_status")
-        print("connect on {}", connection_address)
-        self.socket_status = self.context.socket(zmq.SUB)  # subscriber socket
-        self.socket_status.connect(connection_address)  # connecting to the correct address
-        self.socket_status.setsockopt_string(zmq.SUBSCRIBE, "")  # specifying topic it should listen to
-
-        self.stream_sub = zmqstream.ZMQStream(self.socket_status)
-        self.stream_sub.on_recv(self.process_message)  # starts listening for messages on this channel
-
-        print("Connected to task confirmation channel.")
 
     def open(self):
         """ Function running as soon as the webpage is opened/refreshed. """
 
         print("Connection opened...")
-        socket_clients.add(self)  # adding this as a client
-        self.context = zmq.Context()  # Create a context (containter for all sockets in a process)
-        self.test_and_make_dir()  # making directory for socket bindings
-        self.connect_behavior_channel(self.context)  # binding to the behavior channel
-        self.connect_confirmation_channel(self.context)  # binding to the confirmation channel
+        self.application.socket_clients.add(self)  # adding this as a client
 
     def on_message(self, msg):
         """
@@ -142,17 +163,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             print(decoded)
         """
         print("Sending behavior: " + msg)
-        self.socket_beh.send_string(msg)  # sending a message on the socket to remote-script
+        self.application.socket_beh.send_string(msg)  # sending a message on the socket to remote-script
 
     def on_close(self):
         """ Method to execute when the connection to the webpage is closed. """
-        self.stream_sub.close()
-        self.context.destroy()
-        socket_clients.remove(self)
+        self.application.socket_clients.remove(self)
         print("Connection closed...")
 
 
-def read_config():
+def read_config() -> tuple[str, int, str, str, str]:
     real_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)))
     config_path = os.path.join(real_file_path, "conf", "server.conf")
     if not os.path.exists(config_path):
@@ -192,20 +211,7 @@ def main():
     # print("  sorted! got these values: port {}, keyfile {}, certfile {}"
           # .format(port_number, keyfile, certfile))
 
-    handlers = [
-        (r'/', HelloWorldHandler),
-        (r'/websocket', WebSocketHandler),
-        (r'/(.*)', tornado.web.StaticFileHandler, {'path': public_root}),
-
-    ]
-
-    settings = dict(
-        debug=True,
-        template_path=public_root,
-        default_handler_class=NotFoundHandler
-    )
-
-    application = tornado.web.Application(handlers, **settings)
+    application = RemoteApplication(public_root)
     ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
     # I assume that you don't have all complete chain. So, I use the
     # "chain" file. If you do have the CA in your OS's, you can just
