@@ -24,7 +24,7 @@ import tornado.httpserver
 import tornado.websocket
 import ssl
 import os
-
+import typing
 
 class RemoteApplication(tornado.web.Application):
     APP_ID = "no.nr.remote"
@@ -88,7 +88,7 @@ class RemoteApplication(tornado.web.Application):
         method is invoked.
         """
 
-        self.test_and_make_dir()
+        self._test_and_make_dir()
         connection_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "cmd_status")
         print("connect on {}", connection_address)
         self.socket_status = self.context.socket(zmq.SUB)  # subscriber socket
@@ -100,7 +100,7 @@ class RemoteApplication(tornado.web.Application):
 
         print("Connected to task confirmation channel.")
 
-    def _process_message(self, msg: List[bytes]):
+    def _process_message(self, msg: list[bytes]):
         """
         Message handler: when a confirmation message is sent from the remote,
         this method is invoked and prints out a message to the user.
