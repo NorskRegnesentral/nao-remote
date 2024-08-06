@@ -1025,7 +1025,7 @@ class MyClass(GeneratedClass):
 
     def onInput_onStart(self):
         self.bIsRunning = True
-        sentences = ["Prøv igjen!"]
+        sentences = ["\\vct=95\\Prøv\\vct=100\\i\\pau=0.5\\gjen"]
 
         try:
             sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
