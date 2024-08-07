@@ -60,7 +60,7 @@ class RemoteApplication(tornado.web.Application):
         Making a directory for aiding the communication between the server and
         remote. The method creates the directory in /tmp if it doesn't already exist.
         """
-        print("does {} exist?", RemoteApplication.DIR_PATH)
+        print(f"does {RemoteApplication.DIR_PATH} exist?")
 
         if not os.path.exists(RemoteApplication.DIR_PATH):
             print("No, make it")
@@ -70,7 +70,7 @@ class RemoteApplication(tornado.web.Application):
         """ Creating a publishing socket and binding it to the given address. """
 
         binding_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "behaviors")
-        print("bind on {}", binding_address)
+        print(f"bind on {binding_address}")
 
         self.socket_beh = self.context.socket(zmq.PUB)  # Creating a publisher socket
         self.socket_beh.bind(binding_address)  # Bind the socket to given address
@@ -90,7 +90,7 @@ class RemoteApplication(tornado.web.Application):
 
         self._test_and_make_dir()
         connection_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "cmd_status")
-        print("connect on {}", connection_address)
+        print(f"connect on {connection_address}")
         self.socket_status = self.context.socket(zmq.SUB)  # subscriber socket
         self.socket_status.connect(connection_address)  # connecting to the correct address
         self.socket_status.setsockopt_string(zmq.SUBSCRIBE, "")  # specifying topic it should listen to
@@ -175,7 +175,7 @@ def read_config() -> tuple[str, int, str, str, str]:
     real_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)))
     config_path = os.path.join(real_file_path, "conf", "server.conf")
     if not os.path.exists(config_path):
-        print("No configuration file found at {}. Using defaults.".format(config_path))
+        print(f"No configuration file found at {config_path}. Using defaults.")
 
     config_parser = configparser.ConfigParser()
     config_parser.read(config_path)
@@ -186,30 +186,30 @@ def read_config() -> tuple[str, int, str, str, str]:
                                 fallback=os.path.join(real_file_path, "certs", hostname+".key"))
 
     if not os.path.exists(keyfile):
-        print("Could not find certificate key file at {}. "
-              "Script will likely end in error.".format(keyfile))
+        print(f"Could not find certificate key file at {keyfile}. "
+              "Script will likely end in error.")
     certfile = config_parser.get(section_name, "certfile",
                                  fallback=os.path.join(real_file_path, "certs",
                                                        hostname.replace('.', '_') + "_cert.cer"))
     if not os.path.exists(certfile):
-        print("Could not find certificate file at {}. "
-              "Script will likely end in error.".format(certfile))
+        print(f"Could not find certificate file at {certfile}. "
+              "Script will likely end in error.")
 
     public_root = config_parser.get(section_name, "public_root",
                                     fallback=os.path.join(real_file_path, "public"))
 
     return hostname, port, keyfile, certfile, public_root
 
-    # print("I got these values: host {}, port {}, keyfile {}, certfile {}"
-          # .format(hostname, port, keyfile, certfile))
+    # print(f"I got these values: host {hostname}, port {port}, keyfile {keyfile}, certfile {certfile}"
+          #)
 
 
 def main():
     # Collect the configuration from the config file
     _, port_number, keyfile, certfile, public_root = read_config()
 
-    # print("  sorted! got these values: port {}, keyfile {}, certfile {}"
-          # .format(port_number, keyfile, certfile))
+    # print(f"  sorted! got these values: port {port_number}, keyfile {keyfile}, certfile {certfile}"
+          #)
 
     application = RemoteApplication(public_root)
     ssl_ctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
