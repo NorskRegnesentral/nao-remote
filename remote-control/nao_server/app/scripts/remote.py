@@ -9,8 +9,10 @@ import stk.runner
 import stk.events
 import stk.services
 import stk.logging
+import qi
 
 import os
+from collections import deque
 import zmq
 
 
@@ -29,6 +31,7 @@ class Remote(object):
         self.autonomous_state = "disabled"
         self.s.ALAudioDevice.setOutputVolume(self.current_volume)
         self.logger = stk.logging.get_logger(qiapp.session, Remote.APP_ID)
+        self.behavior_queue = deque()
 
 
     def get_volume(self):
@@ -197,6 +200,32 @@ class Remote(object):
         if not os.path.exists(Remote.DIR_PATH):
             os.makedirs(Remote.DIR_PATH)
 
+    def run_behavior_queue(self):
+        """
+        Take a behavior from the queue, run it and asynchronously send that it has finished.
+        Keep running if the queue is not empty
+        """
+        self.queue_is_running = True
+        while len(self.behavior_queue) != 0:
+            behavior_name = self.behavior_queue.pop()
+            fut = qi.async(self.behavior_to_run, behavior_name)
+            fut.wait()
+            print("Sending confirmation...\n")
+            qi.async(self.socket_status.send_string, "Behavior {} finished".format(behavior_name))
+
+        self.queue_is_running = False
+
+    def listen_for_behaviors(self):
+        """
+        Read the behavior from the socket and append it to the queue.
+        If the queue was empty, signal that the queue should be run.
+        """
+        while self.ready_for_behaviors:
+            behavior_name = self.socket_beh.recv_string()
+            self.behavior_queue.append(behavior_name)
+            if not self.queue_is_running:
+                qi.async(self.run_behavior_queue)
+
     def on_start(self):
         """
         The code that should be run as soon as the script is run. This includes
@@ -205,29 +234,21 @@ class Remote(object):
         Whenever a message is received, the behavior is run on the robot and
         a confirmation message is sent back.
         """
-
         self.context = zmq.Context()  # creating a context
         self.connect_behavior_channel()
         self.connect_confirmation_channel()
-
-        while True:
-            behavior_name = self.socket_beh.recv_string()  # receiving behavior name on the socket
-
-            print("Received behavior to execute: " + behavior_name)
-            self.behavior_to_run(behavior_name)
-
-            print("Sending confirmation...\n")
-            self.socket_status.send_string("Behavior finished")
-
-        self.stop()
+        self.ready_for_behaviors = True
+        self.queue_is_running = False
+        qi.async(self.listen_for_behaviors)
 
     def stop(self):
         "Standard way of stopping the application."
-
+        self.ready_for_behaviors = False
         self.qiapp.stop()
 
     def on_stop(self):
         "Cleanup"
+        self.ready_for_behaviors = False
         self.context.destroy()
         self.logger.info("Application finished.")
         self.events.clear()
