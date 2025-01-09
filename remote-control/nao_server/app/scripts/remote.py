@@ -162,7 +162,9 @@ class Remote(object):
             nao_behavior = "nr_remote_control/" + behavior_name
 
         if len(nao_behavior) > 0:
+            self.running_behavior = nao_behavior
             self.s.ALBehaviorManager.runBehavior(nao_behavior)
+            self.running_behavior = ""
 
     def connect_behavior_channel(self):
         """
@@ -232,7 +234,30 @@ class Remote(object):
         print("Behavior queue is empty.")
         self.queue_is_running = False
 
+    def stop_current_behaviors_and_empty_queue(self):
+        """
+        Empties the behavior queue and stops any running behaviors.
+        If a behavior is running, NAO will return to the rest position.
+        Any incoming behaviors are dropped until this completes.
+        """
+        # Maybe actually in the reverse order to make sure we suddenly don't get into a race.
+        # This assumes that runBehavior exits properly when it is told to stop (which it does)
+        print("Stop the ride, I need to get off!")
+        self.accepting_behaviors = False
+        self.behavior_queue.clear()
+        print("Behavior queue is empty, length {}".format(len(self.behavior_queue)))
+        if len(self.running_behavior):
+            print("Try to stop {}".format(self.running_behavior))
+            self.s.ALBehaviorManager.stopBehavior(self.running_behavior)
+            self.s.ALMotion.rest()  # the robot sits down in crouch position (this is to get us to a known safe spot
+
+        print("Everything stopped! Ready for more...")
+        self.accepting_behaviors = True
+
     def run_oob_command(self, command):
+        """
+        Dispatch the various OOB commands
+        """
         print("Attempt to run oob: {}".format(command))
         if command == "plus":
             self.increase_volume()  # increasing the volume
@@ -240,6 +265,8 @@ class Remote(object):
             self.decrease_volume()  # decreasing the volume
         elif command == "mute" or command == "unmute":
             self.muteRobot(command == "mute")
+        elif command == "emergency_stop":
+            self.stop_current_behaviors_and_empty_queue()
         else:
             print("Unknown OOB command".format(command))
 
@@ -262,12 +289,19 @@ class Remote(object):
         If the queue was empty, signal that the queue should be run.
         """
         print("Listening for behaviors")
+        self.accepting_behaviors = True
+
         while self.ready_for_behaviors:
             behavior_name = self.socket_beh.recv_string()
-            print("Queueing {}".format(behavior_name))
-            self.behavior_queue.append(behavior_name)
-            if not self.queue_is_running:
-                qi.async(self.run_behavior_queue)
+
+            if self.accepting_behaviors:
+                print("Queueing {}".format(behavior_name))
+                self.behavior_queue.append(behavior_name)
+                if not self.queue_is_running:
+                    qi.async(self.run_behavior_queue)
+            else:
+                print("Dropping {} because we are not accepting behaviors".format(behavior_name))
+                continue
         print("Done listening for behaviors")
 
     def on_start(self):
@@ -289,7 +323,7 @@ class Remote(object):
 
     def stop(self):
         "Standard way of stopping the application."
-        self.ready_for_behaviors = self.ready_for_oob = False
+        self.ready_for_behaviors = self.ready_for_oob = self.accepting_behaviors = False
         self.qiapp.stop()
 
     def on_stop(self):
