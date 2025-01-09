@@ -4,27 +4,28 @@ var session;
 
 var hostname = window.location.hostname;
 var socket = new WebSocket("wss://" + hostname + ":9526/websocket");
+var oobsocket = new WebSocket("wss://" + hostname + ":9526/oob");
 
-function addToggleFunction(document, elementID, command1, command2) {
+function addToggleFunction(document, elementID, command1, command2, messageSocket = socket) {
     let button = document.getElementById(elementID);
     button.addEventListener('click', event => {
 	if (button.getAttribute('aria-pressed') === 'true') {
 	    button.removeAttribute('aria-pressed');
-	    socket.send(command1);
+	    messageSocket.send(command1);
 	} else {
 	    button.setAttribute('aria-pressed', 'true');
-	    socket.send(command2);
+	    messageSocket.send(command2);
 	}
     });
 }
 
 window.onload = function () { // a function that is done as soon as the page loads
-    addToggleFunction(document, "muteButton", "unmute", "mute");
+    addToggleFunction(document, "muteButton", "unmute", "mute", oobsocket);
     addToggleFunction(document, "autoButton", "no_autonomous_life", "autonomous_life");
 };
 
-function sendButtonMessage(value) {
-    socket.send(value);
+function sendButtonMessage(value, messageSocket = socket) {
+    messageSocket.send(value);
 }
 
 /*
@@ -53,13 +54,13 @@ function clearMuteButton() {
 
 function onBtnLMinus() { // function to lower the volume
     clearMuteButton();
-    sendButtonMessage("minus");
+    sendButtonMessage("minus", oobsocket);
     
 }
 
 function onBtnLPlus() { // function to increase the volume
     clearMuteButton();
-    sendButtonMessage("plus");
+    sendButtonMessage("plus", oobsocket);
 }
 
 // function to submit the text written by the user and that the robot has to say
@@ -67,7 +68,7 @@ function onBtnLPlus() { // function to increase the volume
 function onBtnSend(){
     const behavior = "tts ";
     var to_speak = document.getElementById("speechText").value;
-    sendButtonMessage(behavior.concat(to_speak));
+    sendButtonMessage(behavior.concat(to_speak), socket);
 }
 
 function textEntered(event) {

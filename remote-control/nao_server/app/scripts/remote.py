@@ -178,6 +178,20 @@ class Remote(object):
 
         print("Connected to behavior channel.")
 
+    def connect_oob_channel(self):
+        """
+        Creating a subscriber socket for receiving messages from the server and
+        connecting to the given address in order to do this. These messages contain the
+        robot behavior to be executed.
+        """
+        connection_address = "ipc://" + os.path.join(Remote.DIR_PATH, "oob")
+        self.test_and_make_dir()
+        self.socket_oob = self.context.socket(zmq.SUB)  # creating a subscriber socket
+        self.socket_oob.setsockopt(zmq.SUBSCRIBE, "")  # specifying which topic to subscribe to
+        self.socket_oob.connect(connection_address)  # connecting to address
+
+        print("Connected to oob channel.")
+
     def connect_confirmation_channel(self):
         """
         Creating a publisher socket for sending messages back to the server and binding
@@ -206,25 +220,55 @@ class Remote(object):
         Keep running if the queue is not empty
         """
         self.queue_is_running = True
-        while len(self.behavior_queue) != 0:
+        print("Running behavior queue...")
+        while len(self.behavior_queue):
             behavior_name = self.behavior_queue.pop()
+            print("  will try to run behavior: {}".format(behavior_name))
             fut = qi.async(self.behavior_to_run, behavior_name)
             fut.wait()
             print("Sending confirmation...\n")
             qi.async(self.socket_status.send_string, "Behavior {} finished".format(behavior_name))
 
+        print("Behavior queue is empty.")
         self.queue_is_running = False
 
+    def run_oob_command(self, command):
+        print("Attempt to run oob: {}".format(command))
+        if command == "plus":
+            self.increase_volume()  # increasing the volume
+        elif command == "minus":
+            self.decrease_volume()  # decreasing the volume
+        elif command == "mute" or command == "unmute":
+            self.muteRobot(command == "mute")
+        else:
+            print("Unknown OOB command".format(command))
+
+            
+    def listen_for_oob(self):
+        """
+        Read the out-of-band channel execute the command
+        """
+        print("Listening for oob")
+        while self.ready_for_oob:
+            oob_command = self.socket_oob.recv_string()
+            # Do something
+            qi.async(self.run_oob_command, oob_command)
+        print("Done listening for oob")
+
+        
     def listen_for_behaviors(self):
         """
         Read the behavior from the socket and append it to the queue.
         If the queue was empty, signal that the queue should be run.
         """
+        print("Listening for behaviors")
         while self.ready_for_behaviors:
             behavior_name = self.socket_beh.recv_string()
+            print("Queueing {}".format(behavior_name))
             self.behavior_queue.append(behavior_name)
             if not self.queue_is_running:
                 qi.async(self.run_behavior_queue)
+        print("Done listening for behaviors")
 
     def on_start(self):
         """
@@ -237,18 +281,20 @@ class Remote(object):
         self.context = zmq.Context()  # creating a context
         self.connect_behavior_channel()
         self.connect_confirmation_channel()
-        self.ready_for_behaviors = True
+        self.connect_oob_channel()
+        self.ready_for_behaviors = self.ready_for_oob = True
         self.queue_is_running = False
         qi.async(self.listen_for_behaviors)
+        qi.async(self.listen_for_oob)
 
     def stop(self):
         "Standard way of stopping the application."
-        self.ready_for_behaviors = False
+        self.ready_for_behaviors = self.ready_for_oob = False
         self.qiapp.stop()
 
     def on_stop(self):
         "Cleanup"
-        self.ready_for_behaviors = False
+        self.ready_for_behaviors = self.ready_for_oob = False
         self.context.destroy()
         self.logger.info("Application finished.")
         self.events.clear()
