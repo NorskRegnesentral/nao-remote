@@ -36,11 +36,14 @@ class RemoteApplication(tornado.web.Application):
         self._test_and_make_dir()  # making directory for socket bindings
         self._connect_behavior_channel()  # binding to the behavior channel
         self._connect_confirmation_channel()  # binding to the confirmation channel
+        self._connect_oob_channel()
         self.socket_clients = set()
+        self.oob_clients = set()
 
         handlers = [
             (r'/', HelloWorldHandler),
             (r'/websocket', WebSocketHandler),
+            (r'/oob', OobSocketHandler),
             (r'/(.*)', tornado.web.StaticFileHandler, {'path': public_root}),
         ]
 
@@ -66,6 +69,17 @@ class RemoteApplication(tornado.web.Application):
             print("No, make it")
             os.makedirs(RemoteApplication.DIR_PATH)
 
+    def _connect_oob_channel(self):
+        """ Creating a out-of-band publishing socket and binding it to the given address. """
+
+        binding_address = "ipc://" + os.path.join(RemoteApplication.DIR_PATH, "oob")
+        print("bind on {}", binding_address)
+
+        self.socket_oob = self.context.socket(zmq.PUB)  # Creating a publisher socket
+        self.socket_oob.bind(binding_address)  # Bind the socket to given address
+
+        print("Connected to oob channel.")            
+            
     def _connect_behavior_channel(self):
         """ Creating a publishing socket and binding it to the given address. """
 
@@ -135,8 +149,43 @@ class NotFoundHandler(tornado.web.RequestHandler):
         self.write("Not Found.")
 
 
+class OobSocketHandler(tornado.websocket.WebSocketHandler):
+
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        """ Function running as soon as the webpage is opened/refreshed. """
+
+        print("Connection opened...")
+        self.application.oob_clients.add(self)  # adding this as a client
+
+    def on_message(self, msg):
+        """
+        Processes the message sent from the webpage. When the user has pressed a
+        button, the corresponding message is sent to the server. The server then
+        sends the message to the remote in order to execute the wanted behavior.
+
+        Args:
+            msg (str): a text describing the behaviour to be executed
+        """
+        """
+            encoded = msg.encode("utf-8")
+            print(encoded)
+            decoded = str(encoded.decode("utf-8"))
+            print(decoded)
+        """
+        print("Sending oob: " + msg)
+        self.application.socket_oob.send_string(msg)  # sending a message on the socket to remote-script
+
+    def on_close(self):
+        """ Method to execute when the connection to the webpage is closed. """
+        self.application.oob_clients.remove(self)
+        print("Connection closed...")
+
+        
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
-    # FixMe, what is the correct thing here?
+
     def check_origin(self, origin):
         return True
 
