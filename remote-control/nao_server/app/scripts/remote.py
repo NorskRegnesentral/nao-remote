@@ -276,6 +276,8 @@ class Remote(object):
         Read the out-of-band channel execute the command
         """
         print("Listening for oob")
+        self.ready_for_oob = True
+
         while self.ready_for_oob:
             oob_command = self.socket_oob.recv_string()
             # Do something
@@ -289,7 +291,8 @@ class Remote(object):
         If the queue was empty, signal that the queue should be run.
         """
         print("Listening for behaviors")
-        self.accepting_behaviors = True
+
+        self.ready_for_behaviors = self.accepting_behaviors = True
 
         while self.ready_for_behaviors:
             behavior_name = self.socket_beh.recv_string()
@@ -316,8 +319,9 @@ class Remote(object):
         self.connect_behavior_channel()
         self.connect_confirmation_channel()
         self.connect_oob_channel()
-        self.ready_for_behaviors = self.ready_for_oob = True
-        self.queue_is_running = False
+        self.accepting_behviors = self.queue_is_running = False
+        self.ready_for_behaviors = self.ready_for_oob = False
+
         qi.async(self.listen_for_behaviors)
         qi.async(self.listen_for_oob)
 
@@ -328,7 +332,7 @@ class Remote(object):
 
     def on_stop(self):
         "Cleanup"
-        self.ready_for_behaviors = self.ready_for_oob = False
+        self.ready_for_behaviors = self.ready_for_oob = self.accepting_behaviors = False
         self.context.destroy()
         self.logger.info("Application finished.")
         self.events.clear()
