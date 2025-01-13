@@ -113,6 +113,10 @@ Button:hover {
 }
 
 .systemBtn {
+    background-color: #880000;
+    padding: 20px 20px;
+    border-radius: 100px;
+    font-size: 200%;
 }
 
 .shutdownBtn {
