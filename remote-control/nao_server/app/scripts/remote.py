@@ -244,15 +244,16 @@ class Remote(object):
         # This assumes that runBehavior exits properly when it is told to stop (which it does)
         print("Stop the ride, I need to get off!")
         self.accepting_behaviors = False
-        self.behavior_queue.clear()
-        print("Behavior queue is empty, length {}".format(len(self.behavior_queue)))
-        if len(self.running_behavior):
-            print("Try to stop {}".format(self.running_behavior))
-            self.s.ALBehaviorManager.stopBehavior(self.running_behavior)
-            self.s.ALMotion.rest()  # the robot sits down in crouch position (this is to get us to a known safe spot
-
-        print("Everything stopped! Ready for more...")
-        self.accepting_behaviors = True
+        try:
+            self.behavior_queue.clear()
+            print("Behavior queue is empty, length {}".format(len(self.behavior_queue)))
+            if len(self.running_behavior):
+                print("Try to stop {}".format(self.running_behavior))
+                self.s.ALBehaviorManager.stopBehavior(self.running_behavior)
+                self.s.ALMotion.rest()  # the robot sits down in crouch position (this is to get us to a known safe spot
+        finally:
+            print("Everything stopped! Ready for more...")
+            self.accepting_behaviors = True
 
     def run_oob_command(self, command):
         """
