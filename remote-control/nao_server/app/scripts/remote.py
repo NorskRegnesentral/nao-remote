@@ -15,6 +15,23 @@ import os
 from collections import deque
 import zmq
 
+def kludge1_listen_for_behaviors(object):
+    object.listen_for_behaviors()
+
+def kludge1_listen_for_oob(object):
+    object.listen_for_oob()
+
+def kludge1_run_behavior_queue(object):
+    object.run_behavior_queue()
+
+def kludge2_behavior_to_run(object, behavior_name):
+    object.behavior_to_run(behavior_name)
+
+def kludge2_run_oob_command(object, oob_command):
+    object.run_oob_command(oob_command)
+
+def kludge3_send_message(socket_status, text):
+    socket_status.send_string(text)
 
 class Remote(object):
     APP_ID = "no.nr.remote"
@@ -226,10 +243,10 @@ class Remote(object):
         while len(self.behavior_queue):
             behavior_name = self.behavior_queue.pop()
             print("  will try to run behavior: {}".format(behavior_name))
-            fut = qi.async(self.behavior_to_run, behavior_name)
+            fut = qi.async(kludge2_behavior_to_run, self, behavior_name)
             fut.wait()
             print("Sending confirmation...\n")
-            qi.async(self.socket_status.send_string, "Behavior {} finished".format(behavior_name))
+            qi.async(kludge3_send_message, self.socket_status, "Behavior {} finished".format(behavior_name))
 
         print("Behavior queue is empty.")
         self.queue_is_running = False
@@ -282,7 +299,7 @@ class Remote(object):
         while self.ready_for_oob:
             oob_command = self.socket_oob.recv_string()
             # Do something
-            qi.async(self.run_oob_command, oob_command)
+            qi.async(kludge2_run_oob_command, self, oob_command)
         print("Done listening for oob")
 
         
@@ -302,7 +319,7 @@ class Remote(object):
                 print("Queueing {}".format(behavior_name))
                 self.behavior_queue.append(behavior_name)
                 if not self.queue_is_running:
-                    qi.async(self.run_behavior_queue)
+                    qi.async(kludge1_run_behavior_queue, self)
             else:
                 print("Dropping {} because we are not accepting behaviors".format(behavior_name))
                 continue
@@ -323,8 +340,8 @@ class Remote(object):
         self.accepting_behviors = self.queue_is_running = False
         self.ready_for_behaviors = self.ready_for_oob = False
 
-        qi.async(self.listen_for_behaviors)
-        qi.async(self.listen_for_oob)
+        qi.async(kludge1_listen_for_behaviors, self)
+        qi.async(kludge1_listen_for_oob, self)
 
     def stop(self):
         "Standard way of stopping the application."
