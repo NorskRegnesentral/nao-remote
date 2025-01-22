@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koble til NAO Fjernkontrollen med IP-adresse</title>
+<style>
+  body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 0;
+  }
+  input {
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 200px;
+  }
+  button {
+      padding: 10px 20px;
+  }
+</style>
+</head>
+<body>
+  <p>
+  <label for="ipInput">Tast inn IP-adressen from NAO</label></p>
+  <input type="text" id="ipInput" placeholder="NAO adresse">
+  <button onclick="convertToUrl()">Gå!</button>
+
+  <script>
+     document.getElementById("ipInput").addEventListener("keypress", function(event) {
+         if (event.key === "Enter") {
+             event.preventDefault();
+             convertToUrl();
+         }
+     });
+    function convertToUrl() {
+        const ip = document.getElementById("ipInput").value;
+        window.open(`https://${ip}:9526/`, '_blank');
+    }
+  </script>
+</body>
+</html>
