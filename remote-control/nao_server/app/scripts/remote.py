@@ -91,8 +91,7 @@ class Remote(object):
         # then behavior_name contains the string "tts" and the text itself in one string
         # removing "tts " from the string
         to_speak = behavior_name.replace("tts ", "")
-        encoded = to_speak.encode("utf-8")
-        to_speak = "\RSPD=" + str(speed) + "\  " + encoded + " \RST\ "
+        to_speak = "\RSPD=" + str(speed) + "\  " + to_speak + " \RST\ "
         self.s.ALTextToSpeech.say(to_speak)
 
     def muteRobot(self, mute):
@@ -313,8 +312,7 @@ class Remote(object):
         self.ready_for_behaviors = self.accepting_behaviors = True
 
         while self.ready_for_behaviors:
-            behavior_name = self.socket_beh.recv_string()
-
+            behavior_name = self.socket_beh.recv_string().encode('utf-8')
             if self.accepting_behaviors:
                 print("Queueing {}".format(behavior_name))
                 self.behavior_queue.append(behavior_name)
