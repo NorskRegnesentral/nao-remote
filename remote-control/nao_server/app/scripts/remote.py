@@ -92,7 +92,7 @@ class Remote(object):
         # removing "tts " from the string
         to_speak = behavior_name.replace("tts ", "")
         to_speak = "\RSPD=" + str(speed) + "\  " + to_speak + " \RST\ "
-        self.s.ALTextToSpeech.say(to_speak)
+        self.s.ALAnimatedSpeech.say(to_speak)
 
     def muteRobot(self, mute):
         self.muted = mute
