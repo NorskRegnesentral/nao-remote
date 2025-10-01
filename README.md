@@ -1,20 +1,34 @@
-# A place for NAO stuff in ROSA
+# A remote control hosted on a webpage for NAO servered over HTTPS
 
-## Contents
-This includes
+# Requirements
 
-* some work on a Nao simulator (in ros_simulation)
-* Nao remote (under rosa)
-* ZeroMQ library built to work on Nao 6 (under rosa/pyzmq-python2)
+You will need a computer that is capable of running a browser that
+supports websockets and javascript. Most graphical browsers released
+in 2012 or later should support this. And a NAO robot for running the
+remote. 
 
-## Requirements
+On your computer need the following installed.
 * qipkg (or Choreographe) for installing behaviors
-* ssh for copying files over to NAO and editing things
+* rsync for copying files over to NAO and editing things 
+* ssh as the method of copying over files
+
+On a NAO6, you will already have Python 2 and Python 3 installed. For a 
+NAO 5 or NAO 4, you will need to install Python 3. You will need the python
+module pyzmq for both Python 2 and Python 3. You will also need the
+tornado module for Python 3. You can use the provided binaries and
+modules from the dist directory as a timesaver. However, if you wish
+to build them yourself, there are instructions for building Python 3
+and pyzmq in the doc directory.
+
+If you do not have a NAO, you can use still run the server and
+get a webpage up to test, but you will not be able to run the client
+part. See [Testing without a NAO](#testing-without-a-nao).
 
 
-## Optional
+# Optional requirements
 * Choreographe for creating new behaviors
 * OpenSSL for generating a self-signed certificate
+* The NAO SDK for your robot if you wish to cross-compile pyzmq and Python yourself (link if possible).
 
 # Nao remote
 
@@ -26,6 +40,7 @@ over. This is much easier to use than remembering to copy all the bits
 over yourself. You need to be able to ssh to NAO for this to work, so
 one should probably have a public SSH key installed on NAO as well so
 you don't have to type passwords all the time.
+
 
 ## Using pyzmq
 
@@ -50,6 +65,20 @@ For using a newer Python 3 than what is on the robot, see external
 documentation from the ROSA project.
 
 
+
+# Making things run automatically on NAO
+
+You can add entries in /home/nao/naoqi/preferences/autoload.ini for the two scripts.
+
+Looking something like:
+```
+[program]
+/home/nao/rosa/scripts/run_remote_naoqi.sh
+/home/nao/rosa/scripts/run_remote_web.sh
+```
+
+
+
 # TLS certificate
 
 You will need a TLS certificate for NAO in order to communicate properly. The quickest way is to create a self-signed certificate on NAO. Assuming that the hostname for the NAO is nao.local, which is the default when using zeroconf, the command would be.
@@ -68,3 +97,7 @@ If NAO is getting a more permanent address (say nao.example.com). The
 best solution is to generate a certificate signing request and get a
 certificate authority to sign the request and issue a certificate that
 you can install. That is beyond the scope of this document.
+
+
+# Testing without a NAO
+
