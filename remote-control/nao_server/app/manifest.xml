@@ -84,7 +84,6 @@
  </contents>
  <requirements>
   <naoqiRequirement minVersion="2.1.4.13"/>
-  <robotRequirement/>
   <robotRequirement model="NAO"/>
  </requirements>
  <services>
