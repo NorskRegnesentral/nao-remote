@@ -7,10 +7,10 @@ if [ "$os_ver" = "4.4.185-rt184-aldebaran" ]; then
   export LD_PRELOAD=/usr/lib/libffi.so.6
 fi
 
-export LD_LIBRARY_PATH=/home/nao/rosa/libffi/lib:/home/nao/rosa/zmq/lib:/home/nao/rosa/openssl3/lib
-export PATH=/home/nao/rosa/python3.10/bin:$PATH
+export LD_LIBRARY_PATH=/home/nao/remote_control/libffi/lib:/home/nao/remote_control/zmq/lib:/home/nao/remote_control/openssl3/lib
+export PATH=/home/nao/remote_control/python3.10/bin:$PATH
 
 PYTHONIOENCODING=utf8
 export PYTHONIOENCODING
 
-cd /home/nao/rosa/nao_server && python3 -u ./server.py >& /home/nao/rosa/scripts/server.log
+cd /home/nao/remote_control/nao_server && python3 -u ./server.py >& /home/nao/remote_control/scripts/server.log

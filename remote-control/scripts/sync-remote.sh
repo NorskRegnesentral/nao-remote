@@ -21,6 +21,7 @@ RSYNC=$(which rsync)
 
 SYNC_ARGS="-avz"
 
+ssh $SSH_BASE mkdir -p remote_control/scripts
 ${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' \
 			     -f '- server.conf' \
 			     -f '- app/b*' \
@@ -38,11 +39,10 @@ ${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' \
 			     -f '- app/icon.png' \
 			     -f '- app/.metadata' \
 			     -f '- app/manifest.xml' \
- "$SRC_DIR/nao_server/" "${DEST_DIR}rosa/nao_server"
+ "$SRC_DIR/nao_server/" "${DEST_DIR}remote_control/nao_server"
 
-# $RSYNC $SYNC_ARGS "$SRC_DIR/rosa/" "${DEST_DIR}rosa"
+# $RSYNC $SYNC_ARGS "$SRC_DIR/remote_control/" "${DEST_DIR}remote_control"
 
-ssh $SSH_BASE mkdir -p rosa/scripts
-$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/activate-py2zqm.sh" "${DEST_DIR}rosa/scripts"
-$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_web.sh" "${DEST_DIR}rosa/scripts"
-$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_naoqi.sh" "${DEST_DIR}rosa/scripts"
+$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/activate-py2zqm.sh" "${DEST_DIR}remote_control/scripts"
+$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_web.sh" "${DEST_DIR}remote_control/scripts"
+$RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_naoqi.sh" "${DEST_DIR}remote_control/scripts"
