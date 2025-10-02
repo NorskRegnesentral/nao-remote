@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Python script for a remote control application for NAO5 and NAO6.
 """

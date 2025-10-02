@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# SPDX-License-Identifier: BSD-2-Clause
+
 """
 Python script for hosting a remote control for NAO v6. The script renders the
 web page and communicates with the remote.py script through ZMQ sockets in order to send commands
