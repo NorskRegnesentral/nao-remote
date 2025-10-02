@@ -46,3 +46,9 @@ ${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' \
 $RSYNC $SYNC_ARGS "$SRC_DIR/scripts/activate-py2zqm.sh" "${DEST_DIR}remote_control/scripts"
 $RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_web.sh" "${DEST_DIR}remote_control/scripts"
 $RSYNC $SYNC_ARGS "$SRC_DIR/scripts/run_remote_naoqi.sh" "${DEST_DIR}remote_control/scripts"
+
+
+
+if ssh $SSH_BASE test ! -f remote_control/nao_server/conf/server.conf; then
+    ssh $SSH_BASE cp remote_control/nao_server/conf/server.conf.sample  remote_control/nao_server/conf/server.conf
+fi

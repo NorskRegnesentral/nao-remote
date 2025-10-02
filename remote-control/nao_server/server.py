@@ -231,7 +231,7 @@ def read_config() -> tuple[str, int, str, str, str]:
     config_parser = configparser.ConfigParser()
     config_parser.read(config_path)
     section_name = "nao-remote-server"
-    hostname = config_parser.get(section_name, "hostname", fallback="nao1.ad.nr.no")
+    hostname = config_parser.get(section_name, "hostname", fallback="nao.local")
     port = config_parser.getint(section_name, "port", fallback=9526)
     keyfile = config_parser.get(section_name, "keyfile",
                                 fallback=os.path.join(real_file_path, "certs", hostname+".key"))

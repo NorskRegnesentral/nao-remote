@@ -8,8 +8,8 @@
 
 # if these aren't listed the script will look for things in a certs
 # directory beside the script (assumes that hostname is nao.example.com):
-# certs/nao.example.com.key
-# certs/nao_example_com_cert.cer
+# /home/nao/remote_control/nao_server/certs/nao.example.com.key
+# /home/nao/remote_control/nao_server/certs/nao_example_com_cert.cer
 
 # keyfile = /path/to/certs/cert.key
 # certfile = /path/to/certs/cert.cer

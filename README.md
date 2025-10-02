@@ -88,7 +88,7 @@ NAO. Assuming that the hostname for the NAO is nao.local, which is the
 default when using zeroconf, the command would be.
 
 ```
-openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/nao/remote_control/nao_server/certs/nao_local.key -out /home/nao/remote_control/nao_server/certs/nao.local.cer -days 365 -subj "/CN=nao.local"
+openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/nao/remote_control/nao_server/certs/nao.local.key -out /home/nao/remote_control/nao_server/certs/nao_local_cert.cer -days 365 -subj "/CN=nao.local"
 ```
 
 Note that a self-signed certificate will generate a warning when
