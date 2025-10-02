@@ -52,7 +52,8 @@ so it works with the Nao. Assuming it is in the same place on the Nao,
 simply source it in:
 
 ```
-source scripts/activate-py2zqm.sh
+scp dist/nao6/remote_control-nao6-python310-and-zmq.tar.xz nao-address:
+ssh nao-address tar Jxf remote_control-nao6-python310-and-zmq.tar.xz
 ```
 
 You should then be able to import pyzmq in Python 2. For Python 3.5
@@ -81,14 +82,20 @@ Looking something like:
 
 # TLS certificate
 
-You will need a TLS certificate for NAO in order to communicate properly. The quickest way is to create a self-signed certificate on NAO. Assuming that the hostname for the NAO is nao.local, which is the default when using zeroconf, the command would be.
+You will need a TLS certificate for NAO in order to communicate
+properly. The quickest way is to create a self-signed certificate on
+NAO. Assuming that the hostname for the NAO is nao.local, which is the
+default when using zeroconf, the command would be.
 
 ```
-openssl req -x509 -nodes -newkey rsa:2048 -keyout nao_local.key -out nao.local.cer -days 365 -subj "/CN=nao.local"
+openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/nao/remote_control/nao_server/certs/nao_local.key -out /home/nao/remote_control/nao_server/certs/nao.local.cer -days 365 -subj "/CN=nao.local"
 ```
 
-Modify the server.conf so that keyfile and certfile point to the full
-path of these files.
+Note that a self-signed certificate will generate a warning when
+accessing the page in most browsers.
+
+After you have a certificate, modify server.conf so that the keyfile and
+certfile fields point to the full path of these files.
 
 You can also run this command on another computer and copy the files
 over, but it is less secure.
