@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="nb">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Koble til NAO Fjernkontrollen med IP-adresse</title>
+<title>Connect to a NAO Remote Control via IP-address</title>
 <style>
   body {
       display: flex;
@@ -25,9 +25,9 @@
 </head>
 <body>
   <p>
-  <label for="ipInput">Tast inn IP-adressen from NAO</label></p>
+  <label for="ipInput">Write in NAO's IP-address</label></p>
   <input type="text" id="ipInput" placeholder="NAO adresse">
-  <button onclick="convertToUrl()">Gå!</button>
+  <button onclick="convertToUrl()">Go!</button>
 
   <script>
      document.getElementById("ipInput").addEventListener("keypress", function(event) {
