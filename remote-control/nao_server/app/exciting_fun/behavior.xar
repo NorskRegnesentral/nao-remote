@@ -64,7 +64,7 @@
                             <Input name="onSet" type="1" type_size="1" nature="1" inner="0" tooltip="The data is set when a signal is received on this input." id="2" />
                             <Output name="onReady" type="1" type_size="1" nature="2" inner="0" tooltip="Signal sent when the data has been set." id="3" />
                             <Output name="onError" type="3" type_size="1" nature="2" inner="0" tooltip="Error output:&#x0A;- triggered if the language asked cannot be set" id="4" />
-                            <Parameter name="Language" inherits_from_parent="0" content_type="3" value="Norwegian" default_value="English" custom_choice="1" tooltip="Set the language the robot speaks and understands." id="5">
+                            <Parameter name="Language" inherits_from_parent="0" content_type="3" value="English" default_value="English" custom_choice="1" tooltip="Set the language the robot speaks and understands." id="5">
                                 <Choice value="Arabic" />
                                 <Choice value="Brazilian" />
                                 <Choice value="Chinese" />
@@ -172,7 +172,7 @@ class MyClass(GeneratedClass):
     def onInput_onStart(self, p):
         self.bIsRunning = True
         try:
-            sentences = ["Interessant!", "Dette er gøy!", "Spennende!"]
+            sentences = ["Interesting!", "That's interesting!", "Exciting!"]
             sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
             sentence += "\VCT="+ str( self.getParameter("Voice shaping (%)") ) + "\ "
             sentence += random.choice(sentences)
@@ -313,7 +313,7 @@ class MyClass(GeneratedClass):
                                                     <chinese>
                                                         <![CDATA[]]>
 </chinese>
-                                                    <language>1</language>
+                                                    <language>2</language>
                                                 </pluginContent>
                                                 <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
                                                 <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Data is sent on the output when this input is stimulated." id="2" />

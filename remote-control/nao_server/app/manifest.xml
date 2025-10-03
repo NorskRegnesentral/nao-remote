@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package version="0.1.3" uuid="nr_remote_control">
+<package version="0.1.4" uuid="nr_remote_control">
  <names>
-  <name lang="en_US">NR Nao Remote</name>
-  <name lang="nn_NO">NR Nao fjernkontrol</name>
+  <name lang="en_US">NAO Remote Control</name>
+  <name lang="nn_NO">NAO fjernkontrol</name>
  </names>
  <descriptions>
-  <description lang="en_US">This is the NAO remote used for the ROSA project.</description>
-  <description lang="nn_NO">Denne er NAO fjernkontrol som er brukt i ROSA prosjektet</description>
+  <description lang="en_US">This is the NAO remote with HTTPS Connection</description>
+  <description lang="nn_NO">Denne er NAO fjernkontrol med HTTPS forbindelse</description>
  </descriptions>
  <supportedLanguages>
   <language>en_US</language>

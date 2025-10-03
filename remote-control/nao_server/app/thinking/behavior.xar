@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ChoregrapheProject xmlns="http://www.ald.softbankrobotics.com/schema/choregraphe/project.xsd" xar_version="3">
-  <Box name="root" id="-1" localization="8" tooltip="Root box of Choregraphe&apos;s behavior. Highest level possible." x="0" y="0">
-    <bitmap>media/images/box/root.png</bitmap>
-    <script language="4">
-      <content>
-        <![CDATA[]]>
-      </content>
-    </script>
-    <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
-    <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
-    <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
-    <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
-    <Timeline enable="0">
-      <BehaviorLayer name="behavior_layer1">
-        <BehaviorKeyframe name="keyframe1" index="1">
-          <Diagram>
-            <Box name="Set Language" id="2" localization="8" tooltip="Select the language you would like the robot to speak and understand. Any following call to&#x0A;ALSpeechRecognition (Speech Reco. box for instance) or ALTextToSpeech (Say box&#x0A;for instance) will use this language." x="229" y="65">
-              <bitmap>media/images/box/interaction/say.png</bitmap>
-              <script language="4">
-                <content>
-                  <![CDATA[class MyClass(GeneratedClass):
+<ChoregrapheProject xmlns="http://www.aldebaran-robotics.com/schema/choregraphe/project.xsd" xar_version="3">
+    <Box name="root" id="-1" localization="8" tooltip="Root box of Choregraphe&apos;s behavior. Highest level possible." x="0" y="0">
+        <bitmap>media/images/box/root.png</bitmap>
+        <script language="4">
+            <content>
+                <![CDATA[]]>
+</content>
+        </script>
+        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished." id="4" />
+        <Timeline enable="0">
+            <BehaviorLayer name="behavior_layer1">
+                <BehaviorKeyframe name="keyframe1" index="1">
+                    <Diagram>
+                        <Box name="Set Language" id="2" localization="8" tooltip="Select the language you would like the robot to speak and understand. Any following call to&#x0A;ALSpeechRecognition (Speech Reco. box for instance) or ALTextToSpeech (Say box&#x0A;for instance) will use this language." x="229" y="65">
+                            <bitmap>media/images/box/interaction/say.png</bitmap>
+                            <script language="4">
+                                <content>
+                                    <![CDATA[class MyClass(GeneratedClass):
     def __init__(self):
         GeneratedClass.__init__(self, False)
 
@@ -58,42 +58,42 @@
             error = "Language " + lang + " cannot be set."
             self.logger.warn(error)
             self.onError(error)]]>
-                </content>
-              </script>
-              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
-              <Input name="onSet" type="1" type_size="1" nature="1" inner="0" tooltip="The data is set when a signal is received on this input." id="2" />
-              <Output name="onReady" type="1" type_size="1" nature="2" inner="0" tooltip="Signal sent when the data has been set." id="3" />
-              <Output name="onError" type="3" type_size="1" nature="2" inner="0" tooltip="Error output:&#x0A;- triggered if the language asked cannot be set" id="4" />
-              <Parameter name="Language" inherits_from_parent="0" content_type="3" value="Norwegian" default_value="English" custom_choice="1" tooltip="Set the language the robot speaks and understands." id="5">
-                <Choice value="Arabic" />
-                <Choice value="Brazilian" />
-                <Choice value="Chinese" />
-                <Choice value="Czech" />
-                <Choice value="Danish" />
-                <Choice value="Dutch" />
-                <Choice value="English" />
-                <Choice value="Finnish" />
-                <Choice value="French" />
-                <Choice value="German" />
-                <Choice value="Greek" />
-                <Choice value="Italian" />
-                <Choice value="Japanese" />
-                <Choice value="Korean" />
-                <Choice value="Norwegian" />
-                <Choice value="Polish" />
-                <Choice value="Portuguese" />
-                <Choice value="Russian" />
-                <Choice value="Spanish" />
-                <Choice value="Swedish" />
-                <Choice value="Turkish" />
-              </Parameter>
-              <Resource name="Speech" type="Lock" timeout="0" />
-            </Box>
-            <Box name="Animated Say" id="1" localization="8" tooltip="Say some text with animations. Note that you must open the box to enter the text." x="564" y="185">
-              <bitmap>media/images/box/interaction/say.png</bitmap>
-              <script language="4">
-                <content>
-                  <![CDATA[class MyClass(GeneratedClass):
+</content>
+                            </script>
+                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                            <Input name="onSet" type="1" type_size="1" nature="1" inner="0" tooltip="The data is set when a signal is received on this input." id="2" />
+                            <Output name="onReady" type="1" type_size="1" nature="2" inner="0" tooltip="Signal sent when the data has been set." id="3" />
+                            <Output name="onError" type="3" type_size="1" nature="2" inner="0" tooltip="Error output:&#x0A;- triggered if the language asked cannot be set" id="4" />
+                            <Parameter name="Language" inherits_from_parent="0" content_type="3" value="English" default_value="English" custom_choice="1" tooltip="Set the language the robot speaks and understands." id="5">
+                                <Choice value="Arabic" />
+                                <Choice value="Brazilian" />
+                                <Choice value="Chinese" />
+                                <Choice value="Czech" />
+                                <Choice value="Danish" />
+                                <Choice value="Dutch" />
+                                <Choice value="English" />
+                                <Choice value="Finnish" />
+                                <Choice value="French" />
+                                <Choice value="German" />
+                                <Choice value="Greek" />
+                                <Choice value="Italian" />
+                                <Choice value="Japanese" />
+                                <Choice value="Korean" />
+                                <Choice value="Norwegian" />
+                                <Choice value="Polish" />
+                                <Choice value="Portuguese" />
+                                <Choice value="Russian" />
+                                <Choice value="Spanish" />
+                                <Choice value="Swedish" />
+                                <Choice value="Turkish" />
+                            </Parameter>
+                            <Resource name="Speech" type="Lock" timeout="0" />
+                        </Box>
+                        <Box name="Animated Say" id="1" localization="8" tooltip="Say some text with animations. Note that you must open the box to enter the text." x="564" y="185">
+                            <bitmap>media/images/box/interaction/say.png</bitmap>
+                            <script language="4">
+                                <content>
+                                    <![CDATA[class MyClass(GeneratedClass):
     def __init__(self):
         GeneratedClass.__init__(self, False)
 
@@ -110,28 +110,28 @@
         if( self.bIsRunning ):
             self.onUnload()
             self.onStopped()]]>
-                </content>
-              </script>
-              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
-              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
-              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
-              <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished or stopped." id="4" />
-              <Parameter name="Voice shaping (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.&#x0A;&#x0A;!Warning! This feature is not available yet in Japanese, Chinese and Korean.' id="5" />
-              <Parameter name="Speed (%)" inherits_from_parent="0" content_type="1" value="50" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed.&#x0A;&#x0A;!Warning! This feature is not available yet in Japanese, Chinese and Korean." id="6" />
-              <Parameter name="Body language mode" inherits_from_parent="0" content_type="3" value="contextual" default_value="contextual" custom_choice="0" tooltip="Change the body language mode during the speech.&#x0A;disabled: The robot will only play the animations given by the user. ex: ^start(...) or ^tag(...)&#x0A;random: During time the robot has no animation to play, he will launch random neutral animations.&#x0A;contextual: During time the robot has no animation to play, he will try to launch a new one accordingly to the saying text. Every time the robot can&apos;t find a contextual animation he will launch a random neutral animation." id="7">
-                <Choice value="disabled" />
-                <Choice value="random" />
-                <Choice value="contextual" />
-              </Parameter>
-              <Timeline enable="0">
-                <BehaviorLayer name="behavior_layer1">
-                  <BehaviorKeyframe name="keyframe1" index="1">
-                    <Diagram>
-                      <Box name="Animated Say Text" id="2" localization="8" tooltip="Say the text received on its input and move during its speech." x="422" y="65">
-                        <bitmap>media/images/box/interaction/say.png</bitmap>
-                        <script language="4">
-                          <content>
-                            <![CDATA[import time
+</content>
+                            </script>
+                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                            <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                            <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                            <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when box behavior is finished or stopped." id="4" />
+                            <Parameter name="Voice shaping (%)" inherits_from_parent="0" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.&#x0A;&#x0A;!Warning! This feature is not available yet in Japanese, Chinese and Korean.' id="5" />
+                            <Parameter name="Speed (%)" inherits_from_parent="0" content_type="1" value="50" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed.&#x0A;&#x0A;!Warning! This feature is not available yet in Japanese, Chinese and Korean." id="6" />
+                            <Parameter name="Body language mode" inherits_from_parent="0" content_type="3" value="contextual" default_value="contextual" custom_choice="0" tooltip="Change the body language mode during the speech.&#x0A;disabled: The robot will only play the animations given by the user. ex: ^start(...) or ^tag(...)&#x0A;random: During time the robot has no animation to play, he will launch random neutral animations.&#x0A;contextual: During time the robot has no animation to play, he will try to launch a new one accordingly to the saying text. Every time the robot can&apos;t find a contextual animation he will launch a random neutral animation." id="7">
+                                <Choice value="disabled" />
+                                <Choice value="random" />
+                                <Choice value="contextual" />
+                            </Parameter>
+                            <Timeline enable="0">
+                                <BehaviorLayer name="behavior_layer1">
+                                    <BehaviorKeyframe name="keyframe1" index="1">
+                                        <Diagram>
+                                            <Box name="Animated Say Text" id="2" localization="8" tooltip="Say the text received on its input and move during its speech." x="422" y="65">
+                                                <bitmap>media/images/box/interaction/say.png</bitmap>
+                                                <script language="4">
+                                                    <content>
+                                                        <![CDATA[import time
 import random
 import string
 
@@ -172,7 +172,7 @@ class MyClass(GeneratedClass):
     def onInput_onStart(self, p):
         self.bIsRunning = True
         try:
-            sentences = ["Hm...", "La meg tenke...", "Skal vi se..."]
+            sentences = ["Hmmmm…", "Let me think…", "Let's see…"]
             sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
             sentence += "\VCT="+ str( self.getParameter("Voice shaping (%)") ) + "\ "
             sentence += random.choice(sentences)
@@ -193,25 +193,25 @@ class MyClass(GeneratedClass):
 
     def onInput_onStop(self):
         self.onUnload()]]>
-                          </content>
-                        </script>
-                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
-                        <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
-                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
-                        <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
-                        <Parameter name="Voice shaping (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.' id="5" />
-                        <Parameter name="Speed (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed." id="6" />
-                        <Parameter name="Body language mode" inherits_from_parent="1" content_type="3" value="contextual" default_value="contextual" custom_choice="0" tooltip="Change the body language mode during the speech.&#x0A;disabled: The robot will only play the animations given by the user. ex: ^start(...) or ^tag(...)&#x0A;random: During time the robot has no animation to play, he will launch random neutral animations.&#x0A;contextual: During time the robot has no animation to play, he will try to launch a new one accordingly to the saying text. Every time the robot can&apos;t find a contextual animation he will launch a random neutral animation." id="7">
-                          <Choice value="disabled" />
-                          <Choice value="random" />
-                          <Choice value="contextual" />
-                        </Parameter>
-                      </Box>
-                      <Box name="Localized Text" id="5" localization="8" tooltip="Send on the output the text associated with the robot&apos;s current voice language.&#x0A;You can display and edit the text associated with any language by&#x0A;selecting the language in the combobox.&#x0A;&#x0A;!!Warning!! The text sent on the output is NOT the displayed one but the one&#x0A;associated with the robot&apos;s current voice language." plugin="localizationbox_plugin" x="169" y="283">
-                        <bitmap>media/images/box/interaction/vocabulary.png</bitmap>
-                        <script language="4">
-                          <content>
-                            <![CDATA[# /!\ Generated content. Do not edit!
+</content>
+                                                </script>
+                                                <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when Diagram is loaded." id="1" />
+                                                <Input name="onStart" type="3" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this Input." id="2" />
+                                                <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this Input." id="3" />
+                                                <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when Box behavior is finished." id="4" />
+                                                <Parameter name="Voice shaping (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="150" tooltip='Used to modify at runtime the voice feature (tone, speed). In a slighty&#x0A;different way than pitch and speed, it gives a kind of &quot;gender or age&#x0A;modification&quot; effect.&#x0A;&#x0A;For instance, a quite good male derivation of female voice can be&#x0A;obtained setting this parameter to 78%.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the&#x0A;speed parameter. For example, if you want to decrease by 20% the voice&#x0A;shaping, you will have to increase by 20% the speed to keep a constant&#x0A;average speed.' id="5" />
+                                                <Parameter name="Speed (%)" inherits_from_parent="1" content_type="1" value="100" default_value="100" min="50" max="200" tooltip="Changes the speed of the voice.&#x0A;&#x0A;Note: For a better effect, you can compensate this parameter with the voice&#x0A;shaping parameter. For example, if you want to increase by 20% the speed, you&#x0A;will have to decrease by 20% the voice shaping to keep a constant average&#x0A;speed." id="6" />
+                                                <Parameter name="Body language mode" inherits_from_parent="1" content_type="3" value="contextual" default_value="contextual" custom_choice="0" tooltip="Change the body language mode during the speech.&#x0A;disabled: The robot will only play the animations given by the user. ex: ^start(...) or ^tag(...)&#x0A;random: During time the robot has no animation to play, he will launch random neutral animations.&#x0A;contextual: During time the robot has no animation to play, he will try to launch a new one accordingly to the saying text. Every time the robot can&apos;t find a contextual animation he will launch a random neutral animation." id="7">
+                                                    <Choice value="disabled" />
+                                                    <Choice value="random" />
+                                                    <Choice value="contextual" />
+                                                </Parameter>
+                                            </Box>
+                                            <Box name="Localized Text" id="5" localization="8" tooltip="Send on the output the text associated with the robot&apos;s current voice language.&#x0A;You can display and edit the text associated with any language by&#x0A;selecting the language in the combobox.&#x0A;&#x0A;!!Warning!! The text sent on the output is NOT the displayed one but the one&#x0A;associated with the robot&apos;s current voice language." plugin="localizationbox_plugin" x="169" y="283">
+                                                <bitmap>media/images/box/interaction/vocabulary.png</bitmap>
+                                                <script language="4">
+                                                    <content>
+                                                        <![CDATA[# /!\ Generated content. Do not edit!
 class MyClass(GeneratedClass):
 	def __init__(self):
 		try: # disable autoBind
@@ -219,6 +219,7 @@ class MyClass(GeneratedClass):
 		except TypeError: # if NAOqi < 1.14
 			GeneratedClass.__init__( self )
 
+		self.tts = ALProxy("ALTextToSpeech")
 		self.sentences = {
 			"Arabic" : "  ",
 			"Czech" : " ^start(animations/Stand/Gestures/Hey_1) Ahoj ^wait(animations/Stand/Gestures/Hey_1) ",
@@ -240,118 +241,115 @@ class MyClass(GeneratedClass):
 			"Russian" : " ^start(animations/Stand/Gestures/Hey_1) Привет ^wait(animations/Stand/Gestures/Hey_1) ",
 			"Swedish" : " ^start(animations/Stand/Gestures/Hey_1) Hallå ^wait(animations/Stand/Gestures/Hey_1) ",
 			"Turkish" : " ^start(animations/Stand/Gestures/Hey_1) Merhaba ^wait(animations/Stand/Gestures/Hey_1) ",
-			"Chinese" : "  ",
+			"Chinese" : "  "
 		}
-
-	def onLoad(self):
-		self.tts = self.session().service("ALTextToSpeech")
 
 	def onInput_onStart(self):
 		sDefaultLang = self.tts.getLanguage()
 		self.onStopped(self.sentences[sDefaultLang])]]>
-                          </content>
-                        </script>
-                        <pluginContent>
-                          <arabic uiName="‎اللغة العربية (Arabic)" languageName="Arabic">
-                            <![CDATA[]]>
-                          </arabic>
-                          <czech uiName="‎Český Jazyk (Czech)" languageName="Czech">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Ahoj ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </czech>
-                          <danish uiName="‎Dansk (Danish)" languageName="Danish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hej ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </danish>
-                          <german uiName="‎Deutsch (German)" languageName="German">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallo ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </german>
-                          <greek uiName="‎Ελληνικά (Greek)" languageName="Greek">
-                            <![CDATA[]]>
-                          </greek>
-                          <english uiName="‎American English (American English)" languageName="English">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hello ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </english>
-                          <spanish uiName="‎Español (Spanish)" languageName="Spanish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hola ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </spanish>
-                          <finnish uiName="‎Suomi (Finnish)" languageName="Finnish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hei ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </finnish>
-                          <french uiName="‎Français (French)" languageName="French">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Bonjour ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </french>
-                          <italian uiName="‎Italiano (Italian)" languageName="Italian">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Ciao ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </italian>
-                          <japanese uiName="‎日本語 (Japanese)" languageName="Japanese">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) こんにちは ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </japanese>
-                          <korean uiName="‎한국어 (Korean)" languageName="Korean">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) 안녕하세요 ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </korean>
-                          <dutch uiName="‎Nederlands (Dutch)" languageName="Dutch">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallo ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </dutch>
-                          <norwegian uiName="‎Norsk (Norwegian)" languageName="Norwegian">
-                            <![CDATA[]]>
-                          </norwegian>
-                          <polish uiName="‎Język polski (Polish)" languageName="Polish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Cześć ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </polish>
-                          <brazilian uiName="‎Português do Brasil (Brazilian)" languageName="Brazilian">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Olá ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </brazilian>
-                          <portuguese uiName="‎Português (Portuguese)" languageName="Portuguese">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Olá ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </portuguese>
-                          <russian uiName="‎Русский (Russian)" languageName="Russian">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Привет ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </russian>
-                          <swedish uiName="‎Svenska (Swedish)" languageName="Swedish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallå ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </swedish>
-                          <turkish uiName="‎Türkçe (Turkish)" languageName="Turkish">
-                            <![CDATA[^start(animations/Stand/Gestures/Hey_1) Merhaba ^wait(animations/Stand/Gestures/Hey_1)]]>
-                          </turkish>
-                          <chinese uiName="‎普通话 (Mandarin Chinese)" languageName="Chinese">
-                            <![CDATA[]]>
-                          </chinese>
-                          <language>english</language>
-                        </pluginContent>
-                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
-                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Data is sent on the output when this input is stimulated." id="2" />
-                        <Output name="onStopped" type="3" type_size="1" nature="1" inner="0" tooltip="Data sent when asked." id="3" />
-                      </Box>
-                      <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
-                      <Link inputowner="5" indexofinput="2" outputowner="0" indexofoutput="2" />
-                      <Link inputowner="2" indexofinput="2" outputowner="5" indexofoutput="3" />
-                    </Diagram>
-                  </BehaviorKeyframe>
-                </BehaviorLayer>
-              </Timeline>
-              <Resource name="Speech" type="Lock" timeout="0" />
-            </Box>
-            <Box name="Stand Up" id="3" localization="8" tooltip="the robot tries to stand up from any position for a number of tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." x="1017" y="177">
-              <bitmap>media/images/box/movement/stand.png</bitmap>
-              <script language="4">
-                <content>
-                  <![CDATA[]]>
-                </content>
-              </script>
-              <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
-              <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
-              <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
-              <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated when the robot succeed in standing up." id="4" />
-              <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when the robot failed to stand up after n tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." id="5" />
-              <Parameter name="Maximum of tries" inherits_from_parent="0" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of stand up before stimulating the failure output." id="6" />
-              <Timeline enable="0">
-                <BehaviorLayer name="StandUpBehavior">
-                  <BehaviorKeyframe name="DetectRobotPose" index="1">
-                    <Diagram>
-                      <Box name="Goto Posture" id="2" localization="8" tooltip="The robot goes from its current postition to the asked posture." x="331" y="92">
-                        <bitmap>media/images/box/box-diagram.png</bitmap>
-                        <script language="4">
-                          <content>
-                            <![CDATA[class MyClass(GeneratedClass):
+</content>
+                                                </script>
+                                                <pluginContent>
+                                                    <arabic>
+                                                        <![CDATA[]]>
+</arabic>
+                                                    <czech>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Ahoj ^wait(animations/Stand/Gestures/Hey_1)]]>
+</czech>
+                                                    <danish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hej ^wait(animations/Stand/Gestures/Hey_1)]]>
+</danish>
+                                                    <german>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallo ^wait(animations/Stand/Gestures/Hey_1)]]>
+</german>
+                                                    <greek>
+                                                        <![CDATA[]]>
+</greek>
+                                                    <english>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hello ^wait(animations/Stand/Gestures/Hey_1)]]>
+</english>
+                                                    <spanish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hola ^wait(animations/Stand/Gestures/Hey_1)]]>
+</spanish>
+                                                    <finnish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hei ^wait(animations/Stand/Gestures/Hey_1)]]>
+</finnish>
+                                                    <french>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Bonjour ^wait(animations/Stand/Gestures/Hey_1)]]>
+</french>
+                                                    <italian>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Ciao ^wait(animations/Stand/Gestures/Hey_1)]]>
+</italian>
+                                                    <japanese>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) こんにちは ^wait(animations/Stand/Gestures/Hey_1)]]>
+</japanese>
+                                                    <korean>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) 안녕하세요 ^wait(animations/Stand/Gestures/Hey_1)]]>
+</korean>
+                                                    <dutch>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallo ^wait(animations/Stand/Gestures/Hey_1)]]>
+</dutch>
+                                                    <norwegian>
+                                                        <![CDATA[]]>
+</norwegian>
+                                                    <polish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Cześć ^wait(animations/Stand/Gestures/Hey_1)]]>
+</polish>
+                                                    <brazilian>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Olá ^wait(animations/Stand/Gestures/Hey_1)]]>
+</brazilian>
+                                                    <portuguese>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Olá ^wait(animations/Stand/Gestures/Hey_1)]]>
+</portuguese>
+                                                    <russian>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Привет ^wait(animations/Stand/Gestures/Hey_1)]]>
+</russian>
+                                                    <swedish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Hallå ^wait(animations/Stand/Gestures/Hey_1)]]>
+</swedish>
+                                                    <turkish>
+                                                        <![CDATA[^start(animations/Stand/Gestures/Hey_1) Merhaba ^wait(animations/Stand/Gestures/Hey_1)]]>
+</turkish>
+                                                    <chinese>
+                                                        <![CDATA[]]>
+</chinese>
+                                                    <language>1</language>
+                                                </pluginContent>
+                                                <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                                <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Data is sent on the output when this input is stimulated." id="2" />
+                                                <Output name="onStopped" type="3" type_size="1" nature="1" inner="0" tooltip="Data sent when asked." id="3" />
+                                            </Box>
+                                            <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+                                            <Link inputowner="5" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                            <Link inputowner="2" indexofinput="2" outputowner="5" indexofoutput="3" />
+                                        </Diagram>
+                                    </BehaviorKeyframe>
+                                </BehaviorLayer>
+                            </Timeline>
+                            <Resource name="Speech" type="Lock" timeout="0" />
+                        </Box>
+                        <Box name="Stand Up" id="3" localization="8" tooltip="the robot tries to stand up from any position for a number of tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." x="1017" y="177">
+                            <bitmap>media/images/box/movement/stand.png</bitmap>
+                            <script language="4">
+                                <content>
+                                    <![CDATA[]]>
+</content>
+                            </script>
+                            <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                            <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                            <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                            <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated when the robot succeed in standing up." id="4" />
+                            <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Signal sent when the robot failed to stand up after n tries.&#x0A;&#x0A;Note: The number of tries can be set in parameters." id="5" />
+                            <Parameter name="Maximum of tries" inherits_from_parent="0" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of stand up before stimulating the failure output." id="6" />
+                            <Timeline enable="0">
+                                <BehaviorLayer name="StandUpBehavior">
+                                    <BehaviorKeyframe name="DetectRobotPose" index="1">
+                                        <Diagram>
+                                            <Box name="Goto Posture" id="2" localization="8" tooltip="The robot goes from its current postition to the asked posture." x="331" y="92">
+                                                <bitmap>media/images/box/box-diagram.png</bitmap>
+                                                <script language="4">
+                                                    <content>
+                                                        <![CDATA[class MyClass(GeneratedClass):
     def __init__(self):
         GeneratedClass.__init__(self, False)
 
@@ -378,44 +376,44 @@ class MyClass(GeneratedClass):
     def onInput_onStop(self):
         self.onUnload() #~ it is recommanded to call onUnload of this box in a onStop method, as the code written in onUnload is used to stop the box as well
         pass]]>
-                          </content>
-                        </script>
-                        <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
-                        <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
-                        <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
-                        <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture has been reached." id="4" />
-                        <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture could not be reached." id="5" />
-                        <Parameter name="Name" inherits_from_parent="0" content_type="3" value="Stand" default_value="Stand" custom_choice="1" tooltip="Name of the posture to go to." id="6">
-                          <Choice value="Crouch" />
-                          <Choice value="LyingBack" />
-                          <Choice value="LyingBelly" />
-                          <Choice value="Sit" />
-                          <Choice value="SitRelax" />
-                          <Choice value="StandInit" />
-                          <Choice value="Stand" />
-                          <Choice value="StandZero" />
-                        </Parameter>
-                        <Parameter name="Speed (%)" inherits_from_parent="0" content_type="1" value="80" default_value="80" min="0" max="100" tooltip="Speed to go to the posture." id="7" />
-                        <Parameter name="Maximum of tries" inherits_from_parent="1" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of go to posture before stimulating the failure output." id="8" />
-                        <Resource name="All motors" type="Lock" timeout="0" />
-                        <Resource name="Stiffness" type="Lock" timeout="0" />
-                      </Box>
-                      <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
-                      <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
-                      <Link inputowner="0" indexofinput="5" outputowner="2" indexofoutput="5" />
+</content>
+                                                </script>
+                                                <Input name="onLoad" type="1" type_size="1" nature="0" inner="1" tooltip="Signal sent when diagram is loaded." id="1" />
+                                                <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
+                                                <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
+                                                <Output name="success" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture has been reached." id="4" />
+                                                <Output name="failure" type="1" type_size="1" nature="1" inner="0" tooltip="Stimulated if the posture could not be reached." id="5" />
+                                                <Parameter name="Name" inherits_from_parent="0" content_type="3" value="Stand" default_value="Stand" custom_choice="1" tooltip="Name of the posture to go to." id="6">
+                                                    <Choice value="Crouch" />
+                                                    <Choice value="LyingBack" />
+                                                    <Choice value="LyingBelly" />
+                                                    <Choice value="Sit" />
+                                                    <Choice value="SitRelax" />
+                                                    <Choice value="StandInit" />
+                                                    <Choice value="Stand" />
+                                                    <Choice value="StandZero" />
+                                                </Parameter>
+                                                <Parameter name="Speed (%)" inherits_from_parent="0" content_type="1" value="80" default_value="80" min="0" max="100" tooltip="Speed to go to the posture." id="7" />
+                                                <Parameter name="Maximum of tries" inherits_from_parent="1" content_type="1" value="3" default_value="3" min="0" max="10" tooltip="The maximum number of fails of go to posture before stimulating the failure output." id="8" />
+                                                <Resource name="All motors" type="Lock" timeout="0" />
+                                                <Resource name="Stiffness" type="Lock" timeout="0" />
+                                            </Box>
+                                            <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
+                                            <Link inputowner="0" indexofinput="4" outputowner="2" indexofoutput="4" />
+                                            <Link inputowner="0" indexofinput="5" outputowner="2" indexofoutput="5" />
+                                        </Diagram>
+                                    </BehaviorKeyframe>
+                                </BehaviorLayer>
+                            </Timeline>
+                            <Resource name="All motors" type="Lock" timeout="0" />
+                        </Box>
+                        <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
+                        <Link inputowner="1" indexofinput="2" outputowner="2" indexofoutput="3" />
+                        <Link inputowner="3" indexofinput="2" outputowner="1" indexofoutput="4" />
+                        <Link inputowner="0" indexofinput="4" outputowner="3" indexofoutput="4" />
                     </Diagram>
-                  </BehaviorKeyframe>
-                </BehaviorLayer>
-              </Timeline>
-              <Resource name="All motors" type="Lock" timeout="0" />
-            </Box>
-            <Link inputowner="2" indexofinput="2" outputowner="0" indexofoutput="2" />
-            <Link inputowner="1" indexofinput="2" outputowner="2" indexofoutput="3" />
-            <Link inputowner="3" indexofinput="2" outputowner="1" indexofoutput="4" />
-            <Link inputowner="0" indexofinput="4" outputowner="3" indexofoutput="4" />
-          </Diagram>
-        </BehaviorKeyframe>
-      </BehaviorLayer>
-    </Timeline>
-  </Box>
+                </BehaviorKeyframe>
+            </BehaviorLayer>
+        </Timeline>
+    </Box>
 </ChoregrapheProject>

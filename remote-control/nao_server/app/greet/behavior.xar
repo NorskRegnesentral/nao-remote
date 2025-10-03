@@ -63,7 +63,7 @@ class MyClass(GeneratedClass):
 
     def onInput_onStart(self):
         self.bIsRunning = True
-        sentences = ["Hei!", "Hallo!", "Hei på deg!"]
+        sentences = ["Hi!", "Hello!", "Hey you!"]
 
         try:
             sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
@@ -785,7 +785,7 @@ class MyClass(GeneratedClass):
                             <Resource name="All motors" type="Lock" timeout="0" />
                             <Resource name="Stiffness" type="Lock" timeout="0" />
                         </Box>
-                        <Box name="Set Language" id="5" localization="8" tooltip="Set the language of your robot for the current application. Your robot will speak and understand the selected language as long as your application has focus. Any following call to ALSpeechRecognition (Speech Reco. box for instance), ALTextToSpeech (Say box for instance) or ALDialog will use this language.&#x0A;" plugin="setlanguage_plugin" x="221" y="78">
+                        <Box name="Set Language" id="5" localization="8" tooltip="Set the language of your robot for the current application. Your robot will speak and understand the selected language as long as your application has focus. Any following call to ALSpeechRecognition (Speech Reco. box for instance), ALTextToSpeech (Say box for instance) or ALDialog will use this language.&#x0A;" plugin="setlanguage_plugin" x="221" y="80">
                             <bitmap>media/images/box/interaction/say.png</bitmap>
                             <script language="4">
                                 <content>
@@ -797,7 +797,7 @@ class MyClass(GeneratedClass):
         self.setTTS = True
         self.setASR = True
         self.setDialog = True
-        self.language = "Norwegian"
+        self.language = "English"
 
     def getService(self, serviceName, humainName):
         service = None
