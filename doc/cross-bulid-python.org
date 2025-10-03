@@ -2,11 +2,15 @@
 
 OK, here are the basics and the configure lines that were used for cross compiling Python 3.10 for NAO 5 and NAO 6. The process is as follows.
 
+This is all done using an Ubuntu 22.04 LTS machine with the NAO cross-toolchain installed (both for NAO 5 and NAO 6).
+
 1. Make sure that you have your paths set correctly for the compilers.
    #+begin_example
    # For Nao 5 add path /path/to/ctc-linux64-atom-2.1.4.13/cross/bin
    # For Nao 6 add path /path/to/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/x86_64-naoqisdk-linux/usr/bin/i686-sbr-linux
    #+end_example
+
+   We will put everything in the path /home/nao/remote_control as that is where it will live on the NAO. These instructions assume you are only building for one type of robot. If you are building for both, adjust the patch accordingly (e.g., /home/nao/remote_control.nao5 as the path instead).
 
 2. Build OpenSSL 3.0 (not strictly necessary for NAO 6, but an OK precaution). We used OpenSSL 3.0.8
 
@@ -14,13 +18,13 @@ OK, here are the basics and the configure lines that were used for cross compili
    # For Nao 5
    mkdir nao5-openssl-build
    cd !$
-   /path/to/openssl3/Configure linux-x86 --prefix=/home/nao/rosa/openssl3 --cross-compile-prefix=i686-aldebaran-linux-gnu-
+   /path/to/openssl3/Configure linux-x86 --prefix=/home/nao/remote_control/openssl3 --cross-compile-prefix=i686-aldebaran-linux-gnu-
    make
    make install
 
 
    # For Nao 6
-   /path/to/openssl3/Configure linux-x86 --prefix=/home/nao/rosa/openssl3 --cross-compile-prefix=i686-sbr-linux-
+   /path/to/openssl3/Configure linux-x86 --prefix=/home/nao/remote_control/openssl3 --cross-compile-prefix=i686-sbr-linux-
    make
    make install
 #+end_example
@@ -43,13 +47,13 @@ OK, here are the basics and the configure lines that were used for cross compili
    # For NAO 5
    mkdir build-nao5
    cd !$
-   ../path/to/Python-3.10.10/configure '--prefix=/home/nao/rosa/python3.10' '--build=x86_64-pc-linux-gnu' '--host=i686-aldebaran-linux-gnu' 'ac_cv_buggy_getaddrinfo=no' 'ac_cv_file__dev_ptmx=yes' 'ac_cv_file__dev_ptc=no' '--enable-optimizations' '--with-openssl=/home/nao/rosa/openssl3' '--with-system-ffi' 'build_alias=x86_64-pc-linux-gnu' 'host_alias=i686-aldebaran-linux-gnu' 'CFLAGS=-I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/ffi/lib/libffi-3.0.10/include -I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/zlib/include' 'CPPFLAGS=-I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/ffi/lib/libffi-3.0.10/include'
+   ../path/to/Python-3.10.10/configure '--prefix=/home/nao/remote_control/python3.10' '--build=x86_64-pc-linux-gnu' '--host=i686-aldebaran-linux-gnu' 'ac_cv_buggy_getaddrinfo=no' 'ac_cv_file__dev_ptmx=yes' 'ac_cv_file__dev_ptc=no' '--enable-optimizations' '--with-openssl=/home/nao/remote_control/openssl3' '--with-system-ffi' 'build_alias=x86_64-pc-linux-gnu' 'host_alias=i686-aldebaran-linux-gnu' 'CFLAGS=-I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/ffi/lib/libffi-3.0.10/include -I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/zlib/include' 'CPPFLAGS=-I/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/ffi/lib/libffi-3.0.10/include'
    make
    make install
 
    # For NAO 6
    mkdir build-nao6
-   ../path/to/Python-3.10.10/configure '--prefix=/home/nao/rosa/python3.10' '--build=x86_64-pc-linux-gnu' '--host=i686-sbr-linux' 'ac_cv_buggy_getaddrinfo=no' 'ac_cv_file__dev_ptmx=yes' 'ac_cv_file__dev_ptc=no' '--enable-optimizations' '--with-openssl=/home/nao/rosa/openssl3' 'build_alias=x86_64-pc-linux-gnu' 'host_alias=i686-sbr-linux' 'CC=i686-sbr-linux-gcc --sysroot /netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux -Wl,--as-needed,--sysroot /netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux' 'CFLAGS=-pipe -fomit-frame-pointer  -m32 -march=core2 -mtune=core2  -mssse3 -mfpmath=sse -O2 -I/netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux/usr/lib/libffi-3.2.1/include' '--with-system-ffi'
+   ../path/to/Python-3.10.10/configure '--prefix=/home/nao/remote_control/python3.10' '--build=x86_64-pc-linux-gnu' '--host=i686-sbr-linux' 'ac_cv_buggy_getaddrinfo=no' 'ac_cv_file__dev_ptmx=yes' 'ac_cv_file__dev_ptc=no' '--enable-optimizations' '--with-openssl=/home/nao/remote_control/openssl3' 'build_alias=x86_64-pc-linux-gnu' 'host_alias=i686-sbr-linux' 'CC=i686-sbr-linux-gcc --sysroot /netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux -Wl,--as-needed,--sysroot /netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux' 'CFLAGS=-pipe -fomit-frame-pointer  -m32 -march=core2 -mtune=core2  -mssse3 -mfpmath=sse -O2 -I/netopt/nao-sdks/ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux/usr/lib/libffi-3.2.1/include' '--with-system-ffi'
    make
    make install
 #+end_example
@@ -57,54 +61,28 @@ OK, here are the basics and the configure lines that were used for cross compili
 This should give you a Python 3.10 that supports most of what you need.    
 
 
-* Cross-compiling ZMQ for NAO 5 and NAO 6
+* Cross-compiling ZMQ 
 
 The toolchain configuration defined for cmake in the Nao5 compilers is wrong (don't need to use FORCE, just use regular).
 
-You can't just take pyzmq from Nao6 and have it work on Nao5, there's a problem with conversion to unicode mismatch. Darn.
+You can't just take pyzmq from Nao6 and have it work on Nao5. They are  different architectures and there's a problem with conversion to unicode mismatch.
 
-Well, we need to build things anyway. Let's try with getting python3.5 going.
+You can follow the instructions [[https://crossenv.readthedocs.io/en/latest/quickstart.html#build-or-obtain-host-python][Crossenv]] to set up a cross-python environment. The configure line for host python is.
 
-Ensure you have python3.5 installed and create a virtual environment for it.
-
-Then, download the last python 3.5 release (Python 3.5.10).
-
-Unzip into a the python source and create a build directory and cd into it.
-
-Create a config.site-i686-aldebaran file with the following information
-#+begin_example
-ac_cv_file__dev_ptmx=yes
-ac_cv_file__dev_ptc=no
-#+end_example
-
-
-
-Then add the Nao5 cross-compiler to your path (for me /netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/cross/bin)
-
-Forget all the above. I used the instructions from [[https://crossenv.readthedocs.io/en/latest/quickstart.html#build-or-obtain-host-python][Crossenv]], which was very helpful. My configure line for host python is.
-
-Run configure:
-
-#+begin_example
-
-
-./configure --prefix=/home/nao/nao5-python3.5 --build=x86_64-pc-linux-gnu --host=i686-aldebaran-linux-gnu ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes  ac_cv_file__dev_ptc=no --enable-optimizations  
-
-#+end_example
-
-
-** Zmq
+** Zmq for NAO 5
 
 Yes, you can build the thing zeromq more or less the same as before. Just make sure you have the toolchain configured.
 
 #+begin_example
-cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.local/share/qi/toolchains/nao5toolchain/toolchain-nao5toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/nao/rosa/zmq -DCMAKE_BUILD_TYPE=Release ../
+cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.local/share/qi/toolchains/nao5toolchain/toolchain-nao5toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/nao/remote_control/zmq -DCMAKE_BUILD_TYPE=Release ../
 
 #+end_example
 
-Unfortunately, there are problems with the binaries, as it needs to link to clock_gettime, but I guess it's enough. I had to whack the CMakefile to add it to the link line for zmq and turn off building tests.
+Unfortunately, there are problems with the binaries, as it needs to link to clock_gettime, it seems to be enough.  The CMakefile had to be edited to add it to the link line for zmq and turn off building tests.
 
-I was also able to build the PyZMQ since it seems that I couldn't get wheels. I had to follow my previous version, but also hardcode the zmq version because I couldn't run vers. This seems to be a problem with crossenv, but whatever killing that and explicitly setting CFLAGS and CXXFLAGS helps
+You must also build PyZMQ for Python 2 and Python 3. I had to follow my previous version, but also hardcode the zmq version because I couldn't run vers. This seems to be a problem with crossenv, but setting CFLAGS and CXXFLAGS  explicitly helps:
+
+*** For Python 2
 
 #+begin_example
 export PATH=/netopt/nao-sdks/ctc-linux64-atom-2.1.4.13/cross/bin:$PATH
@@ -117,73 +95,23 @@ pip download "pyzmq==19.0.2"
 tar zxvf pyzmq-19.0.2.tar.gz
 cd pyzmq-19.0.2
 # Python here is python2 on host…
-python setup.py configure --plat-name=i686-aldebaran-linux-gnu --zmq=/home/nao/rosa/zmq
+python setup.py configure --plat-name=i686-aldebaran-linux-gnu --zmq=/home/nao/remote_control/zmq
 
 # Fix setup so that it uses the correct version.
 
 python setup.py build
-setup.py install --prefix=/home/nao/rosa/py2-pyzmq
+setup.py install --prefix=/home/nao/remote_control/py2-pyzmq
 
 #+end_example
 
-** Crossenv
+*** For Python 3
 
-The crossenv package seems to be helpful. At least it builds a Python that can be run on the Nao. This may be a way forward to getting a modern version of Python on all Nao's. It still has some rough edges as can be seen by the pyzmq above. Still, at least I got something to work.
+For Python 3, we can use Crossenv.  It still has some rough edges as can be seen by the pyzmq above.
 
 It seems you can also bundle up the cross directory and splat it out on the robot. That is cool.
 
-Notes, python 3.6 and up require OpenSSL 1.1.1 (which isn't on Nao5). So, that will need to be cross-compiled too. That probably is going to take some work and manual configuration. I went with OpenSSL 3.0 since that is supported until the project is over.
-
-The initial version seems to work with:
-
-#+begin_example
-
-./Configure linux-x86 --prefix=/home/nao/rosa/openssl3 --cross-compile-prefix=i686-aldebaran-linux-gnu-
-
-# Then build Python 3.10
-
-../configure --prefix=/home/nao/nao5-python3.10 --build=x86_64-pc-linux-gnu --host=i686-aldebaran-linux-gnu ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes  ac_cv_file__dev_ptc=no --enable-optimizations --with-openssl=/home/nao/rosa/openssl3 
-
-
-#+end_example
-
-
-This works, but falls over with ctypes, which we likely need. That is
-dependent on libffi. So, let's build Python with the newer libffi:
-
-#+begin_example
-../configure --prefix=/home/nao/rosa/libffi --build=x86_64-pc-linux-gnu --host=i686-aldebaran-linux-gnu
-
-../configure --prefix=/home/nao/rosa/python3.10 --build=x86_64-pc-linux-gnu --host=i686-aldebaran-linux-gnu ac_cv_buggy_getaddrinfo=no ac_cv_file__dev_ptmx=yes  ac_cv_file__dev_ptc=no --enable-optimizations --with-openssl=/home/nao/rosa/openssl3  --with-system-ffi
-
-# Need to set CPP flags to make sure it finds libffi.
-export CPPFLAGS=-I/home/nao/rosa/libffi/include
-
-
-
-
-#+end_example
-
-Note: both SDKs have ffi.h, they just need to be added to the include path. For future reference:
-
-#+begin_example
-./ctc-linux64-atom-2.8.7.4-20210818_162500/yocto-sdk/sysroots/core2-32-sbr-linux/usr/lib/libffi-3.2.1/include/ffi.h
-./ctc-linux64-atom-2.1.4.13/ffi/lib/libffi-3.0.10/include/ffi.h
-#+end_example
-
-After it is configured, go in and enable the zlib module in Modules/Setup.local (copy the bits from Modules/Setup and adjust the include path and libs path accordingly). Also remember that you need to have libffi-dev installed on the build system when building the "build-python"
-
-This does work. So, now we have Python 3.10 for Nao5. 
 
 Now setup crossenv and build a crossenv for it
-#+begin_example
-cd /home/nao/rosa
-python3 -m crossenv /home/nao/rosa/python3.10/bin/python3.10 python310_cross
-source python310_cross/bin/activate
-build-pip install cffi
-build-pip install wheel
-pip install tornado==6.2
-#+end_example
 
 pyzmq doesn't work so, easy, so we need to massage it a little, but it works very similar to building for Python 2 on Nao 5.
 
@@ -199,49 +127,35 @@ pip download "pyzmq==19.0.2"
 tar zxvf pyzmq-19.0.2.tar.gz
 cd pyzmq-19.0.2
 patch -p0 < pyzmq-19.0.2-build.diff
-python3 setup.py configure --plat-name=i686-aldebaran-linux-gnu --zmq=/home/nao/rosa/zmq
+python3 setup.py configure --plat-name=i686-aldebaran-linux-gnu --zmq=/home/nao/remote_control/zmq
 python3 setup.py build
-python3 setup.py install --prefix=/home/nao/rosa/python310_cross/cross
+python3 setup.py install --prefix=/home/nao/remote_control/python310_cross/cross
 #+end_example
 
-Now we should have a copy of all the packages we need in /home/nao/rosa/python310_cross/cross/lib directory, we'll move those into the cross-compiled python.
+Now we should have a copy of all the packages we need in /home/nao/remote_control/python310_cross/cross/lib directory, we'll move those into the cross-compiled python.
+
 #+begin_example
-cp -R /home/nao/rosa/python310_cross/cross/lib/python3.10/site-packages/* /home/nao/rosa/python3.10/lib/python3.10/site-packages
+cp -R /home/nao/remote_control/python310_cross/cross/lib/python3.10/site-packages/* /home/nao/remote_control/python3.10/lib/python3.10/site-packages
 # You can now remove the cross environment.
 #+end_example
 
 
-Let's tar it up and copy it over to Nao.
+You can tar it up and copy it over to NAO.
 #+begin_example
-tar cvfz rosa-nao5-python310.tar.gz rosa.nao5
-scp rosa-nao5-python310.tar.gz naoX:
+tar cvfz nao5-python310.tar.gz remote_control
+scp nao5-python310.tar.gz naoX:
 #+end_example
 
 While we are on the main machine, let's sync the remote over as well.
 
-#+begin_example
-cd /path/to/nao-remote/scripts
-./sync-remote.sh nao
-#+end_example
+* For NAO 6
 
-The remote is synced over to /home/nao/rosa
-
-On the Nao, we need to untar and move this into the correct position
-#+begin_example
-tar zxvf rosa-nao5-python310.tar.gz
-mv rosa5 rosa
-#+end_example
-
-Edit the /home/nao/rosa/nao_server/conf/server.conf to point to the correct certificates. You did generate certificates, right?
-
-Easyrsa is setup and works fine for signing the requests for a dev setup.
-
-This was tested with Nao5, it should also work with Nao6. Let's see, the only difference is for configuring pyzmq
+The process is more or less the same for NAO 6, with paths changed to the correct cross-tools and changing the CMAKE_TOOLCHAIN_FILE. Here is how you configure pyzmq for a NAO 6.
 
 #+begin_example
-python3 setup.py configure --plat-name=i686-sbr-linux --zmq=/home/nao/rosa/zmq
+python3 setup.py configure --plat-name=i686-sbr-linux --zmq=/home/nao/remote_control/zmq
 python3 setup.py build
-python3 setup.py install --prefix=/home/nao/rosa/python310_cross/cross
+python3 setup.py install --prefix=/home/nao/remote_control/python310_cross/cross
 #+end_example
 
 
