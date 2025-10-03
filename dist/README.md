@@ -9,4 +9,5 @@ This prebuilt software is distributed under the terms of their original licenses
 * Python 3.10.10: Python Software Foundation License Version 2
 * OpenSSL 3.0.8: Apache License, Version 2.0
 * ZeroMQ 4.3.4: LGPL-3.0+ (with custom exceptions)
+* Tornado: Apache License, Version 2.0
 * libffi: MIT license

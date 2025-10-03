@@ -8,17 +8,24 @@ in 2012 or later should support this. And a NAO robot for running the
 remote. 
 
 On your computer need the following installed.
-* qipkg (or Choreographe) for installing behaviors
+* qi and qibuild python modules for installing behaviors (or use
+  [Choreographe](https://aldebaran.com/en/support/kb/nao6/downloads/nao6-software-downloads/))
 * rsync for copying files over to NAO and editing things 
-* ssh as the method of copying over files
+* ssh as the method of copying over files.
 
-On a NAO6, you will already have Python 2 and Python 3 installed. For a 
+On a NAO6 has a version of Python 3, but we will install our own Python.
 NAO 5 or NAO 4, you will need to install Python 3. You will need the python
 module pyzmq for both Python 2 and Python 3. You will also need the
 tornado module for Python 3. You can use the provided binaries and
 modules from the dist directory as a timesaver. However, if you wish
 to build them yourself, there are instructions for building Python 3
 and pyzmq in the doc directory.
+
+In the past, the remote has run and worked with the Python 3 installed
+on NAO6 and modules installed from its pip, but this has not been
+tested for a while. You can use
+[remote_contrlol/nao_server/requirements.txt](remote_control/nao_server/requirements.txt)
+in this case.
 
 If you do not have a NAO, you can use still run the server and
 get a webpage up to test, but you will not be able to run the client
@@ -28,59 +35,67 @@ part. See [Testing without a NAO](#testing-without-a-nao).
 # Optional requirements
 * Choreographe for creating new behaviors
 * OpenSSL for generating a self-signed certificate
-* The NAO SDK for your robot if you wish to cross-compile pyzmq and Python yourself (link if possible).
+* The NAO Linux developer tools for your robot if you wish to
+  cross-compile pyzmq and Python yourself (link if possible).
 
-# Nao remote
+# Installation
 
-See the separate README.md in the rosa nao_server directory for more
-information.
+The remote control runs completely on NAO. The web page is served
+using Python 3.10 and the [Tornado
+framework](https://www.tornadoweb.org/en/stable/). It communicates
+with a Python 2 process to communicate with NAOqi via
+[ZeroMQ](https://zeromq.org/). Installation consists of several steps.
 
-There also is a `sync-remote` script that will rsync changed bits
-over. This is much easier to use than remembering to copy all the bits
-over yourself. You need to be able to ssh to NAO for this to work, so
-one should probably have a public SSH key installed on NAO as well so
-you don't have to type passwords all the time.
+1. Installing Python 3, Python modules, and associated libraries
+2. Copying over the remote
+3. Installing behaviors
+4. Installing a TLS certificate
 
+Much of the installation will use ssh, so one should probably have a
+public SSH key installed on NAO as well so you don't have to type
+passwords all the time.
 
-## Using pyzmq
+## Installing Python 3, Python modules, and associated libraries
 
-The ZeroMQ and Python 2 bindings are the `rosa` directory. Rsync this
-over to Nao. 
-
-There are scripts in `rosa/scripts` to set the proper environment variables
-so it works with the Nao. Assuming it is in the same place on the Nao,
-simply source it in:
+In the `dist` directory are tarball archives that include the Python
+3, pyzmq, and the associated libraries for NAO5 and NAO6. Copy the
+tarball over to NAO and unpack the archive.
 
 ```
 scp dist/nao6/remote_control-nao6-python310-and-zmq.tar.xz nao-address:
 ssh nao-address tar Jxf remote_control-nao6-python310-and-zmq.tar.xz
 ```
 
-You should then be able to import pyzmq in Python 2. For Python 3.5
-that is already installed on the NAO6, use pip to install pyzmq. They
-seem to interoperate well, even though they use different libraries. A
-future task may be to make sure that both use Python 2 and Python 3
-use the same library.
+If you would rather build these libraries yourself, instructions are
+included in [the doc directory](doc/cross-build-python.org)
 
-For using a newer Python 3 than what is on the robot, see external
-documentation from the ROSA project.
+## Copy over the remote
 
+Use the `sync-remote` script top copy over the scripts. This uses
+rsync and ssh to copy the bits over.
 
-
-# Making things run automatically on NAO
-
-You can add entries in /home/nao/naoqi/preferences/autoload.ini for the two scripts.
-
-Looking something like:
 ```
-[program]
-/home/nao/rosa/scripts/run_remote_naoqi.sh
-/home/nao/rosa/scripts/run_remote_web.sh
+cd remote-control/scripts
+./sync-remote.sh
 ```
 
+that will rsync changed bits over. 
 
+## Installing behaviors
 
-# TLS certificate
+The behaviors for the remote are under nao_server/app. You can install
+it using Choreographe. Alternatively you can use `qipkg` from the
+qibuild python module.
+
+```
+python3 -mvenv qibuild_env
+source qibuild_env/bin/activate
+pip install qi qibuild
+cd nao-remote/remote-control/nao_server/app
+qipkg deploy-package remote.pml --url nao@nao.local
+```
+
+# Installing a TLS certificate
 
 You will need a TLS certificate for NAO in order to communicate
 properly. The quickest way is to create a self-signed certificate on
@@ -94,17 +109,63 @@ openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/nao/remote_control/nao_s
 Note that a self-signed certificate will generate a warning when
 accessing the page in most browsers.
 
-After you have a certificate, modify server.conf so that the keyfile and
-certfile fields point to the full path of these files.
+After you have a certificate, modify
+`remote_control/nao_server/conf/server.conf` so that the keyfile and
+certfile fields point to the full path of these files. By default
+server will use look for files like above.
 
 You can also run this command on another computer and copy the files
 over, but it is less secure.
 
-If NAO is getting a more permanent address (say nao.example.com). The
-best solution is to generate a certificate signing request and get a
-certificate authority to sign the request and issue a certificate that
-you can install. That is beyond the scope of this document.
+If a NAO is getting a more permanent address (say nao.example.com).
+The best solution is to generate a certificate signing request and get
+a certificate authority to sign the request and issue a certificate
+that you can install. That is beyond the scope of this document.
 
+# Running the remote
+
+One you have all the parts installed, you should be able to run the
+remote and connect to it. First, you need to start the webserver and
+the NAOqi client. Here is a way to start them in the background.
+
+```
+/home/nao/remote_control/scripts/run_remote_naoqi.sh &
+/home/nao/remote_control/scripts/run_remote_web.sh &
+```
+
+The order here is not important, but both must be started. Each script
+creates a log file (`remote.log` and `server.log` respectively). That
+you can use to check their status.
+
+Assuming you didn't make any other changes to the configuration and
+your robot is reachable from nao.local, you should be able to connect
+to the robot over HTTPS on port 9526.
+
+https://nao.local:9526
+
+If you robot does not have a host address, use its IP-address instead.
+You can use the [index.html in local directory](remote-control/local/index.html) to
+make this easier.
+
+## Making things run automatically on NAO
+
+You can add entries under `[program]` in
+/home/nao/naoqi/preferences/autoload.ini for the two scripts so that
+the remote is ready when NAO starts up.
+
+```
+[program]
+/home/nao/remote_control/scripts/run_remote_naoqi.sh
+/home/nao/remote_control/scripts/run_remote_web.sh
+```
 
 # Testing without a NAO
+
+It's not possible to easily test the NAOqi parts without a NAO robot
+or a simulator that speaks NAOqi. However, you can run the remote
+control locally to see how that looks. Make sure you have a TLS
+certificate for localhost (see [Installing a TLS
+certificate](#installing-a-tls-certificate)) and that `server.conf`
+knows where the certificate and keyfile are. Then, start
+`run_remote_web.sh` and point your browser to https://localhost:9526
 
