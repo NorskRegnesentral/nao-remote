@@ -62,7 +62,7 @@ In the `dist` directory are tarball archives that include the Python
 tarball over to NAO and unpack the archive.
 
 ```
-scp dist/nao6/remote_control-nao6-python310-and-zmq.tar.xz nao-address:
+scp dist/remote_control-nao6-python310-and-zmq.tar.xz nao-address:
 ssh nao-address tar Jxf remote_control-nao6-python310-and-zmq.tar.xz
 ```
 
