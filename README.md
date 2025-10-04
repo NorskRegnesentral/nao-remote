@@ -99,8 +99,9 @@ qipkg deploy-package remote.pml --url nao@nao.local
 
 You will need a TLS certificate for NAO in order to communicate
 properly. The quickest way is to create a self-signed certificate on
-NAO. Assuming that the hostname for the NAO is nao.local, which is the
-default when using zeroconf, the command would be.
+NAO (You can use the `openssl` binary from dist if installed Python 3
+using that). Assuming that the hostname for the NAO is nao.local,
+which is the default when using zeroconf, the command would be.
 
 ```
 openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/nao/remote_control/nao_server/certs/nao.local.key -out /home/nao/remote_control/nao_server/certs/nao_local_cert.cer -days 365 -subj "/CN=nao.local"
