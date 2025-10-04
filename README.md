@@ -9,7 +9,7 @@ remote.
 
 On your computer need the following installed.
 * qi and qibuild python modules for installing behaviors (or use
-  [Choreographe](https://aldebaran.com/en/support/kb/nao6/downloads/nao6-software-downloads/))
+  [Choregraphe](https://aldebaran.com/en/support/kb/nao6/downloads/nao6-software-downloads/))
 * rsync for copying files over to NAO and editing things 
 * ssh as the method of copying over files.
 
@@ -33,7 +33,7 @@ part. See [Testing without a NAO](#testing-without-a-nao).
 
 
 # Optional requirements
-* Choreographe for creating new behaviors
+* Choregraphe for creating new behaviors
 * OpenSSL for generating a self-signed certificate
 * The NAO Linux developer tools for your robot if you wish to
   cross-compile pyzmq and Python yourself (link if possible).
@@ -84,7 +84,7 @@ that will rsync changed bits over.
 ## Installing behaviors
 
 The behaviors for the remote are under nao_server/app. You can install
-it using Choreographe. Alternatively you can use `qipkg` from the
+it using Choregraphe. Alternatively you can use `qipkg` from the
 qibuild python module.
 
 ```
@@ -95,7 +95,7 @@ cd nao-remote/remote-control/nao_server/app
 qipkg deploy-package remote.pml --url nao@nao.local
 ```
 
-# Installing a TLS certificate
+## Installing a TLS certificate
 
 You will need a TLS certificate for NAO in order to communicate
 properly. The quickest way is to create a self-signed certificate on
