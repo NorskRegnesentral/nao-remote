@@ -27,7 +27,7 @@ class MyClass(GeneratedClass):
         self.setTTS = True
         self.setASR = True
         self.setDialog = True
-        self.language = "Norwegian"
+        self.language = "English"
 
     def getService(self, serviceName, humainName):
         service = None
@@ -125,7 +125,7 @@ class MyClass(GeneratedClass):
 
     def onInput_onStart(self):
         self.bIsRunning = True
-        sentences = ["Neste oppgave!"]
+        sentences = ["Next task!"]
 
         try:
             sentence = "\RSPD="+ str( self.getParameter("Speed (%)") ) + "\ "
