@@ -24,7 +24,7 @@ and pyzmq in the doc directory.
 In the past, the remote has run and worked with the Python 3 installed
 on NAO6 and modules installed from its pip, but this has not been
 tested for a while. You can use
-[remote_contrlol/nao_server/requirements.txt](remote_control/nao_server/requirements.txt)
+[remote_control/nao_server/requirements.txt](remote_control/nao_server/requirements.txt)
 in this case.
 
 If you do not have a NAO, you can use still run the server and
@@ -62,8 +62,8 @@ In the `dist` directory are tarball archives that include the Python
 tarball over to NAO and unpack the archive.
 
 ```
-scp dist/remote_control-nao6-python310-and-zmq.tar.xz nao-address:
-ssh nao-address tar Jxf remote_control-nao6-python310-and-zmq.tar.xz
+scp dist/remote_control-nao6-python310-and-zmq.tar.xz nao@nao-address:
+ssh nao@nao-address tar xvf remote_control-nao6-python310-and-zmq.tar.xz
 ```
 
 If you would rather build these libraries yourself, instructions are
@@ -75,7 +75,7 @@ Use the `sync-remote` script top copy over the scripts. This uses
 rsync and ssh to copy the bits over.
 
 ```
-cd remote-control/scripts
+cd remote_control/scripts
 ./sync-remote.sh
 ```
 
@@ -91,7 +91,7 @@ qibuild python module.
 python3 -mvenv qibuild_env
 source qibuild_env/bin/activate
 pip install qi qibuild
-cd nao-remote/remote-control/nao_server/app
+cd nao-remote/remote_control/nao_server/app
 qipkg deploy-package remote.pml --url nao@nao.local
 ```
 
@@ -145,7 +145,7 @@ to the robot over HTTPS on port 9526.
 https://nao.local:9526
 
 If you robot does not have a host address, use its IP-address instead.
-You can use the [index.html in local directory](remote-control/local/index.html) to
+You can use the [index.html in local directory](remote_control/local/index.html) to
 make this easier.
 
 ## Making things run automatically on NAO
