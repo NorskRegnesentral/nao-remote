@@ -29,6 +29,7 @@ ${RSYNC:?"rysnc not found!"} $SYNC_ARGS -f '- *.pyc' \
 			     -f '- app/c*' \
 			     -f '- app/g*' \
 			     -f '- app/m*' \
+                             -f '- app/*.pkg' \
 			     -f '- app/next_task' \
 			     -f '- app/raise_hand' \
 			     -f '- app/remote.pml' \
