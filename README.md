@@ -13,8 +13,8 @@ On your computer need the following installed.
 * rsync for copying files over to NAO and editing things 
 * ssh as the method of copying over files.
 
-On a NAO6 has a version of Python 3, but we will install our own Python.
-NAO 5 or NAO 4, you will need to install Python 3. You will need the python
+On a NAO V6 has a version of Python 3, but we will install our own Python.
+NAO V5, you will need to install Python 3. You will need the python
 module pyzmq for both Python 2 and Python 3. You will also need the
 tornado module for Python 3. You can use the provided binaries and
 modules from the dist directory as a timesaver. However, if you wish
@@ -22,13 +22,13 @@ to build them yourself, there are instructions for building Python 3
 and pyzmq in the doc directory.
 
 In the past, the remote has run and worked with the Python 3 installed
-on NAO6 and modules installed from its pip, but this has not been
+on NAO v6 and modules installed from its pip, but this has not been
 tested for a while. You can use
 [remote_control/nao_server/requirements.txt](remote_control/nao_server/requirements.txt)
 in this case.
 
 If you do not have a NAO, you can use still run the server and
-get a webpage up to test, but you will not be able to run the client
+get a web page up to test, but you will not be able to run the client
 part. See [Testing without a NAO](#testing-without-a-nao).
 
 
@@ -58,7 +58,7 @@ passwords all the time.
 ## Installing Python 3, Python modules, and associated libraries
 
 In the `dist` directory are tarball archives that include the Python
-3, pyzmq, and the associated libraries for NAO5 and NAO6. Copy the
+3, pyzmq, and the associated libraries for NAO V5 and NAO V6. Copy the
 tarball over to NAO and unpack the archive.
 
 ```
@@ -79,7 +79,7 @@ cd remote_control/scripts
 ./sync-remote.sh
 ```
 
-that will rsync changed bits over. 
+Running this script later will only copy over the changed bits.
 
 ## Installing behaviors
 
@@ -112,7 +112,7 @@ accessing the page in most browsers.
 
 After you have a certificate, modify
 `remote_control/nao_server/conf/server.conf` so that the keyfile and
-certfile fields point to the full path of these files. By default
+certfile fields point to the full path of these files. By default,
 server will use look for files like above.
 
 You can also run this command on another computer and copy the files
@@ -125,7 +125,7 @@ that you can install. That is beyond the scope of this document.
 
 # Running the remote
 
-One you have all the parts installed, you should be able to run the
+Once you have all the parts installed, you should be able to run the
 remote and connect to it. First, you need to start the webserver and
 the NAOqi client. Here is a way to start them in the background.
 
@@ -144,7 +144,7 @@ to the robot over HTTPS on port 9526.
 
 https://nao.local:9526
 
-If you robot does not have a host address, use its IP-address instead.
+If your robot does not have a host address, use its IP-address instead.
 You can use the [index.html in local directory](remote_control/local/index.html) to
 make this easier.
 
