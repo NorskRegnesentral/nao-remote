@@ -36,7 +36,7 @@ part. See [Testing without a NAO](#testing-without-a-nao).
 * Choregraphe for creating new behaviors
 * OpenSSL for generating a self-signed certificate
 * The NAO Linux developer tools for your robot if you wish to
-  cross-compile pyzmq and Python yourself (link if possible).
+  cross-compile pyzmq and Python yourself (currently offline).
 
 # Installation
 
